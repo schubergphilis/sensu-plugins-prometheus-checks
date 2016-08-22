@@ -37,7 +37,7 @@ checks:
   - check: load_per_cluster
     host: sbppapik8s
     cfg:
-      cluster: nodes
+      cluster: prometheus
       warn: 1.0
       crit: 2.0
       source: sbppapik8s
@@ -45,7 +45,7 @@ checks:
     host: sbppapik8s
     name: cluster_load_minus_n
     cfg:
-      cluster: nodes
+      cluster: prometheus
       minus_n: 1
       warn: 1.0
       crit: 2.0
