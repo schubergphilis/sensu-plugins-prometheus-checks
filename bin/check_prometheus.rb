@@ -7,7 +7,7 @@ require 'cgi'
 
 def query stuff
   stuff = CGI.escape(stuff)
-  host, port = 'localhost:9090'.split(':')
+  host, port = ENV['PROMETHEUS_ENDPOINT'].split(':')
   http = Net::HTTP.new(host, port)
   http.read_timeout = 3
   http.open_timeout = 3
@@ -118,10 +118,18 @@ if __FILE__ == $0
   checks = YAML.load_file(ARGV[0]||'config.yml')
   cfg = checks['config']
   checks['checks'].each do |check|
-    results << send(check['check'], check['cfg'])
+    begin
+      results << send(check['check'], check['cfg'])
+    rescue
+      puts "Check: #{check} failed!"
+    end
   end
   checks['custom'].each do |check|
-    results << custom(check)
+    begin
+      results << custom(check)
+    rescue
+      puts "Check: #{check} failed!"
+    end
   end
   results.flatten(1).each do |result|
     event = {
@@ -129,7 +137,11 @@ if __FILE__ == $0
     }.merge(result)
     if event['source'] =~ /#{cfg['whitelist']}/
       event['source'] = safe_hostname(event['source'])
-      send_event(event)
+      if ENV['PROM_DEBUG']
+        puts event
+      else
+        send_event(event)
+      end
     end
   end
   exit 0
