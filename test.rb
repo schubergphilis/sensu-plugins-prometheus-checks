@@ -3,7 +3,9 @@
 require 'json'
 require 'net/http'
 
+`docker-compose stop`
 `docker-compose rm -f`
+`docker-compose create`
 `docker-compose start`
 
 count = 0
