@@ -7,7 +7,7 @@ require 'cgi'
 
 def query stuff
   stuff = CGI.escape(stuff)
-  host, port = ENV['PROMETHEUS_ENDPOINT'].split(':')
+  host, port = (ENV['PROMETHEUS_ENDPOINT'] || 'localhost:9090').split(':')
   http = Net::HTTP.new(host, port)
   http.read_timeout = 3
   http.open_timeout = 3
