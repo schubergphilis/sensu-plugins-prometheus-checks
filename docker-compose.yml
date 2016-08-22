@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  promtheues:
+    image: quay.io/prometheus/prometheus:v1.0.1
+    container_name: prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+      - '-config.file=/etc/prometheus/prometheus.yml'
+      - '-storage.local.path=/prometheus'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+  node-exporter1:
+    image: prom/node-exporter
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    volumes:
+      - ./node-exporter/node1/:/etc/node-exporter/
+    command:
+      - "-collectors.enabled=textfile"
+      - "-collector.textfile.directory=/etc/node-exporter/"
+  node-exporter2:
+    image: prom/node-exporter
+    expose:
+      - 9101
+    ports:
+      - 9101:9100
+    volumes:
+      - ./node-exporter/node2/:/etc/node-exporter/
+    command:
+      - "-collectors.enabled=textfile"
+      - "-collector.textfile.directory=/etc/node-exporter/"
+  node-exporter3:
+    image: prom/node-exporter
+    expose:
+      - 9102
+    ports:
+      - 9102:9100
+    volumes:
+      - ./node-exporter/node3/:/etc/node-exporter/
+    command:
+      - "-collectors.enabled=textfile"
+      - "-collector.textfile.directory=/etc/node-exporter/"

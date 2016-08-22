@@ -1,0 +1,58 @@
+---
+checks:
+  #  - check: service
+  #    cfg:
+  #      name: xenserver-pv-version.service
+#  - check: service
+#    cfg:
+#      name: kube-controller-manager.service
+#  - check: service
+#    cfg:
+#      name: kube-scheduler.service
+#  - check: service
+#    cfg:
+#      name: kube-kubelet.service
+#  - check: service
+#    cfg:
+#      name: kube-proxy.service
+#  - check: memory
+#    cfg:
+#      warn: 90
+#      crit: 95
+#  - check: disk
+#    cfg:
+#      mount: '/'
+#      name: 'root'
+#      warn: 90
+#      crit: 95
+#  - check: disk
+#    cfg:
+#      mount: '/var/lib/docker'
+#      name: 'docker'
+#      warn: 90
+#      crit: 95
+  - check: load_per_cluster
+    host: sbppapik8s
+    cfg:
+      cluster: prometheus
+      warn: 1.0
+      crit: 2.0
+      source: sbppapik8s
+#  - check: load_per_cluster_minus_n
+#    host: sbppapik8s
+#    name: cluster_load_minus_n
+#    cfg:
+#      cluster: nodes
+#      minus_n: 1
+#      warn: 1.0
+#      crit: 2.0
+#      source: sbppapik8s
+#custom:
+#  - name: heartbeat
+#    query: up
+#    check:
+#      type: equals
+#      value: 1
+#    msg:
+#      0: 'OK: Endpoint is alive and kicking'
+#      2: 'CRIT: Endpoints not reachable!'
