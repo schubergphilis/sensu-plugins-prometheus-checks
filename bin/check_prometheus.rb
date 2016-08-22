@@ -104,29 +104,33 @@ def equals result, value
   end
 end
 
+def custom(check)
+  results = []
+  query(check['query'])['data']['result'].each do |result|
+    status = send(check['check']['type'], result['value'][1], check['check']['value'])
+    results << {'status' => status, 'output' => "#{check['msg'][status]}", 'source' => result['metric']['instance'], 'name' => check['name']}
+  end
+  results
+end
+
 if __FILE__ == $0
   results = []
   checks = YAML.load_file(ARGV[0]||'config.yml')
+  cfg = checks['config']
   checks['checks'].each do |check|
     results << send(check['check'], check['cfg'])
   end
+  checks['custom'].each do |check|
+    results << custom(check)
+  end
   results.flatten(1).each do |result|
     event = {
-      'reported_by' => 'sbppapik8s'
+      'reported_by' => cfg['reported_by']
     }.merge(result)
-    if event['source'] =~ /sbppapi/
+    if event['source'] =~ /#{cfg['whitelist']}/
       event['source'] = safe_hostname(event['source'])
-      puts event
-      #send_event(event)
+      send_event(event)
     end
   end
-  #checks['custom'].each do |check|
-  #  query(check['query'])['data']['result'].each do |result|
-  #    puts result
-  #    status = send(check['check']['type'], result['value'][1], check['check']['value'])
-  #    puts result['metric']['instance']
-  #    puts check['msg'][status['status']]
-  #  end
-  #end
   exit 0
 end

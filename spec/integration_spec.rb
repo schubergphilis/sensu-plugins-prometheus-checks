@@ -1,4 +1,4 @@
-require_relative '../check_prometheus'
+require_relative '../bin/check_prometheus'
 
 require 'rspec/expectations'
 
@@ -104,5 +104,26 @@ describe '#load_per_cluster_minus_n' do
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.22|load=0.22',
                                              'source' => 'test',
                                              'name'   => 'cluster_load_minus_n')
+  end
+end
+
+describe '#custom' do
+  it 'performs a custom prometheus query' do
+    cfg = {'name' => 'heartbeat',
+           'query' => 'up',
+           'check' => {
+             'type' => 'equals',
+             'value' => 1
+           },
+           'msg'  => {
+             0 => 'OK: Endpoint is alive and kicking',
+             1 => 'CRIT: Endpoints not reachable!'
+           }
+          }
+    results = custom(cfg)
+    expect(results).to include_hash_matching('output' => 'OK: Endpoint is alive and kicking',
+                                             'source' => 'node-exporter3:9100',
+                                             'status' => 0,
+                                             'name'   => 'heartbeat')
   end
 end
