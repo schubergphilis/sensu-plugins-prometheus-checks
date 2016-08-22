@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name    = 'sensu-plugins-prometheus-checks'
-  gem.version = '0.0.1'
+  gem.version = '0.0.2'
   gem.date    = Date.today.to_s
   gem.summary = "Sensu plugin for monitoring servers by querying prometheus"
   gem.description = "Sensu plugin for monitoring servers by querying prometheus"
