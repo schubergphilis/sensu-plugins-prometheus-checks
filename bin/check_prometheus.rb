@@ -67,6 +67,27 @@ def disk(cfg)
   results
 end
 
+def disk_all(cfg)
+  results = []
+  ignored = cfg['ignore_fs'] || 'tmpfs'
+  ignore_fs = "fstype!~\"#{ignored}\""
+  query(percent_query_free("node_filesystem_files{#{ignore_fs}}","node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
+    hostname = result['metric']['instance']
+    mountpoint = result['metric']['mountpoint']
+    inodes = result['value'][1].to_i
+    status = check(inodes, cfg['warn'], cfg['crit'])
+    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{mountpoint}", 'source' => hostname}
+  end
+  query(percent_query_free("node_filesystem_size{#{ignore_fs}}","node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
+    hostname = result['metric']['instance']
+    mountpoint = result['metric']['mountpoint']
+    disk = result['value'][1].to_i
+    status = check(disk, cfg['warn'], cfg['crit'])
+    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Usage: #{disk}% |disk=#{disk}", 'name' => "check_disk_#{mountpoint}", 'source' => hostname}
+  end
+  results
+end
+
 def inode(cfg)
   results = []
   disk = "mountpoint=\"#{cfg['mount']}\""

@@ -68,6 +68,32 @@ describe '#disk' do
   end
 end
 
+describe '#disk_all' do
+  it 'returns a list of disk values' do
+    cfg = {'ignore_fs' => 'tmpfs',
+           'warn' => 90,
+           'crit' => 95}
+    results = disk_all(cfg)
+    expect(results).to include_hash_matching('output' => 'Disk: /, Usage: 18% |disk=18',
+                                             'source' => 'node-exporter1:9100',
+                                             'name'   => 'check_disk_/')
+    expect(results).to include_hash_matching('output' => 'Disk: /var/lib/docker, Usage: 29% |disk=29',
+                                             'source' => 'node-exporter2:9100',
+                                             'name'   => 'check_disk_/var/lib/docker')
+    expect(results).to include_hash_matching('output' => 'Disk: /var/lib/docker, Inode Usage: 8% |inodes=8',
+                                             'source' => 'node-exporter2:9100',
+                                             'name'   => 'check_inode_/var/lib/docker')
+    expect(results).not_to include_hash_matching('name' => 'check_disk_/run')
+  end
+  it 'allows overriding the ignore_fs' do
+    cfg = {'ignore_fs' => 'test',
+           'warn' => 90,
+           'crit' => 95}
+    results = disk_all(cfg)
+    expect(results).to include_hash_matching('name' => 'check_disk_/run')
+  end
+end
+
 describe '#inode' do
   it 'returns a list of inode values' do
     cfg = {'mount' => '/usr',
