@@ -53,12 +53,24 @@ end
 
 def disk(cfg)
   results = []
-  disk = "mountpoint=\"#{cfg['mount']}\""
-  query("100-(node_filesystem_size{#{disk}}/(node_filesystem_size{#{disk}}+node_filesystem_avail{#{disk}})*100)")['data']['result'].each do |result|
+  mountpoint = "mountpoint=\"#{cfg['mount']}\""
+  query("100-(node_filesystem_size{#{mountpoint}}/(node_filesystem_size{#{mountpoint}}+node_filesystem_avail{#{mountpoint}})*100)")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
     results << {'status' => status, 'output' => "Disk: #{disk}%, Mountpoint: #{cfg['mount']} |disk=#{disk}", 'name' => "check_disk_#{cfg['name']}", 'source' => hostname}
+  end
+  results
+end
+
+def inode(cfg)
+  results = []
+  disk = "mountpoint=\"#{cfg['mount']}\""
+  query("100-((node_filesystem_files_free{#{disk}}/node_filesystem_files{#{disk}})*100)")['data']['result'].each do |result|
+    hostname = result['metric']['instance']
+    inodes = result['value'][1].to_i
+    status = check(inodes, cfg['warn'], cfg['crit'])
+    results << {'status' => status, 'output' => "Disk: #{cfg['mount']}, Inodes: #{inodes}% |inodes=#{inodes}", 'name' => "check_inodes_#{cfg['name']}", 'source' => hostname}
   end
   results
 end

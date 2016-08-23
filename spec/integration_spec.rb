@@ -68,6 +68,19 @@ describe '#disk' do
   end
 end
 
+describe '#inode' do
+  it 'returns a list of inode values' do
+    cfg = {'mount' => '/usr',
+           'name' => 'usr',
+           'warn' => 90,
+           'crit' => 95}
+    results = inode(cfg)
+    expect(results).to include_hash_matching('output' => 'Disk: /usr, Inodes: 5% |inodes=5',
+                                             'source' => 'node-exporter1:9100',
+                                             'name'   => 'check_inodes_usr')
+  end
+end
+
 describe '#service' do
   it 'checks a service is active' do
     cfg = {'name' => 'xenserver-pv-version.service'}
