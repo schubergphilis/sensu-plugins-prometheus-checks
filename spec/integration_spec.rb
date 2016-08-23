@@ -49,9 +49,9 @@ describe '#memory' do
   it 'returns a list of memory values' do
     cfg = {'warn' => 90, 'crit' => 95}
     results = memory(cfg)
-    expect(results).to include_hash_matching('output' => 'Memory 36%|memory=36', 'source' => 'node-exporter1:9100')
-    expect(results).to include_hash_matching('output' => 'Memory 41%|memory=41', 'source' => 'node-exporter2:9100')
-    expect(results).to include_hash_matching('output' => 'Memory 41%|memory=41', 'source' => 'node-exporter3:9100')
+    expect(results).to include_hash_matching('output' => 'Memory 41%|memory=41', 'source' => 'node-exporter1:9100')
+    expect(results).to include_hash_matching('output' => 'Memory 29%|memory=29', 'source' => 'node-exporter2:9100')
+    expect(results).to include_hash_matching('output' => 'Memory 29%|memory=29', 'source' => 'node-exporter3:9100')
   end
 end
 
@@ -62,7 +62,7 @@ describe '#disk' do
            'warn' => 90,
            'crit' => 95}
     results = disk(cfg)
-    expect(results).to include_hash_matching('output' => 'Disk: 45%, Mountpoint: / |disk=45',
+    expect(results).to include_hash_matching('output' => 'Disk: 18%, Mountpoint: / |disk=18',
                                              'source' => 'node-exporter1:9100',
                                              'name'   => 'check_disk_root')
   end
@@ -138,5 +138,19 @@ describe '#custom' do
                                              'source' => 'node-exporter3:9100',
                                              'status' => 0,
                                              'name'   => 'heartbeat')
+  end
+end
+
+describe '#precent_query_free' do
+  it 'creates a prometheus query' do
+    total = 'total_something{hello="world"}'
+    available = 'available_something{world="hello"}'
+    expect(percent_query_free(total,available)).to eq('100-((available_something{world="hello"}/total_something{hello="world"})*100)')
+  end
+  it 'accurately calculates the percentage free' do
+    total = '100'
+    available = '30'
+    result = query(percent_query_free(total,available))
+    expect(result['data']['result'][1]).to eq('70')
   end
 end

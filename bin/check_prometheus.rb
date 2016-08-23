@@ -40,9 +40,13 @@ def check result, warn, crit
   status
 end
 
+def percent_query_free(total,available)
+  "100-((#{available}/#{total})*100)"
+end
+
 def memory(cfg)
   results = []
-  query('100-(node_memory_MemTotal/(node_memory_MemTotal+node_memory_MemAvailable)*100)')['data']['result'].each do |result|
+  query(percent_query_free('node_memory_MemTotal','node_memory_MemAvailable'))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     memory = result['value'][1].to_i
     status = check(memory, cfg['warn'], cfg['crit'])
@@ -54,7 +58,7 @@ end
 def disk(cfg)
   results = []
   mountpoint = "mountpoint=\"#{cfg['mount']}\""
-  query("100-(node_filesystem_size{#{mountpoint}}/(node_filesystem_size{#{mountpoint}}+node_filesystem_avail{#{mountpoint}})*100)")['data']['result'].each do |result|
+  query(percent_query_free("node_filesystem_size{#{mountpoint}}", "node_filesystem_avail{#{mountpoint}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
@@ -66,7 +70,7 @@ end
 def inode(cfg)
   results = []
   disk = "mountpoint=\"#{cfg['mount']}\""
-  query("100-((node_filesystem_files_free{#{disk}}/node_filesystem_files{#{disk}})*100)")['data']['result'].each do |result|
+  query(percent_query_free("node_filesystem_files{#{disk}}","node_filesystem_files_free{#{disk}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     inodes = result['value'][1].to_i
     status = check(inodes, cfg['warn'], cfg['crit'])
