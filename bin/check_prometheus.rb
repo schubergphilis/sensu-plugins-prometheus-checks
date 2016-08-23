@@ -15,8 +15,8 @@ def query stuff
   JSON.load(http.request(request).body)
 end
 
-def safe_hostname(hostname)
-  hostname.gsub(/-|:/,'_')
+def sensu_safe(string)
+  string.gsub(/[^\w\.-]+/,'_')
 end
 
 def send_event(event)
@@ -42,6 +42,14 @@ end
 
 def percent_query_free(total,available)
   "100-((#{available}/#{total})*100)"
+end
+
+def nice_disk_name(disk)
+  if disk == '/'
+    'root'
+  else
+    disk.gsub(/^\//,'').gsub(/\/$/,'').gsub(/\//,'_')
+  end
 end
 
 def memory(cfg)
@@ -74,16 +82,18 @@ def disk_all(cfg)
   query(percent_query_free("node_filesystem_files{#{ignore_fs}}","node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
+    disk_name = nice_disk_name(mountpoint)
     inodes = result['value'][1].to_i
     status = check(inodes, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{mountpoint}", 'source' => hostname}
+    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{disk_name}", 'source' => hostname}
   end
   query(percent_query_free("node_filesystem_size{#{ignore_fs}}","node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
+    disk_name = nice_disk_name(mountpoint)
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Usage: #{disk}% |disk=#{disk}", 'name' => "check_disk_#{mountpoint}", 'source' => hostname}
+    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Usage: #{disk}% |disk=#{disk}", 'name' => "check_disk_#{disk_name}", 'source' => hostname}
   end
   results
 end
@@ -173,7 +183,8 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
       'reported_by' => cfg['reported_by']
     }.merge(result)
     if event['source'] =~ /#{cfg['whitelist']}/
-      event['source'] = safe_hostname(event['source'])
+      event['source'] = sensu_safe(event['source'])
+      event['name'] = sensu_safe(event['source'])
       if ENV['PROM_DEBUG']
         puts event
       else

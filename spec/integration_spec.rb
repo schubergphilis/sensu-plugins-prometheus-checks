@@ -39,9 +39,12 @@ describe '#query' do
   end
 end
 
-describe '#safe_hostname' do
+describe '#sensu_safe' do
   it 'returns a safe hostname' do
-    expect(safe_hostname('test-hostname:9100')).to eql('test_hostname_9100')
+    expect(sensu_safe('test-hostname:9100')).to eql('test-hostname_9100')
+  end
+  it 'returns a safe check name' do
+    expect(sensu_safe('check_disk_/root/')).to eql('check_disk__root_')
   end
 end
 
@@ -76,21 +79,21 @@ describe '#disk_all' do
     results = disk_all(cfg)
     expect(results).to include_hash_matching('output' => 'Disk: /, Usage: 18% |disk=18',
                                              'source' => 'node-exporter1:9100',
-                                             'name'   => 'check_disk_/')
+                                             'name'   => 'check_disk_root')
     expect(results).to include_hash_matching('output' => 'Disk: /var/lib/docker, Usage: 29% |disk=29',
                                              'source' => 'node-exporter2:9100',
-                                             'name'   => 'check_disk_/var/lib/docker')
+                                             'name'   => 'check_disk_var_lib_docker')
     expect(results).to include_hash_matching('output' => 'Disk: /var/lib/docker, Inode Usage: 8% |inodes=8',
                                              'source' => 'node-exporter2:9100',
-                                             'name'   => 'check_inode_/var/lib/docker')
-    expect(results).not_to include_hash_matching('name' => 'check_disk_/run')
+                                             'name'   => 'check_inode_var_lib_docker')
+    expect(results).not_to include_hash_matching('name' => 'check_disk_run')
   end
   it 'allows overriding the ignore_fs' do
     cfg = {'ignore_fs' => 'test',
            'warn' => 90,
            'crit' => 95}
     results = disk_all(cfg)
-    expect(results).to include_hash_matching('name' => 'check_disk_/run')
+    expect(results).to include_hash_matching('name' => 'check_disk_run')
   end
 end
 
@@ -180,3 +183,13 @@ describe '#precent_query_free' do
     expect(result['data']['result'][1]).to eq('70')
   end
 end
+
+describe '#nice_disk_name' do
+  it 'returns a nice disk name for root' do
+    expect(nice_disk_name('/')).to eql('root')
+  end
+  it 'returns a nice disk name for a disk with lots of slashes' do
+    expect(nice_disk_name('/lots/of/slashes/')).to eql('lots_of_slashes')
+  end
+end
+
