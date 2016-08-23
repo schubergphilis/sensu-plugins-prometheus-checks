@@ -131,7 +131,7 @@ def load_per_cluster_minus_n(cfg)
 
   cpu = query("#{sum_load}/(#{total_cpus}-(#{total_cpus}/#{total_nodes})*#{minus_n})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
-  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => 'cluster_load_minus_n', 'source' => cfg['source']}]
+  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load_minus_n", 'source' => cfg['source']}]
 end
 
 
@@ -139,7 +139,14 @@ def load_per_cluster(cfg)
   cluster = cfg['cluster']
   cpu = query("sum(node_load5{job=\"#{cluster}\"})/count(node_cpu{mode=\"system\",job=\"#{cluster}\"})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
-  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => 'cluster_load', 'source' => cfg['source']}]
+  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load", 'source' => cfg['source']}]
+end
+
+def memory_per_cluster(cfg)
+  cluster = cfg['cluster']
+  memory = query(percent_query_free("sum(node_memory_MemTotal{job=\"#{cluster}\"})","sum(node_memory_MemAvailable{job=\"#{cluster}\"})"))['data']['result'][0]['value'][1].to_i
+  status = check(memory, cfg['warn'], cfg['crit'])
+  [{'status' => status, 'output' => "Cluster Memory: #{memory}%|memory=#{memory}", 'name' => "cluster_#{cfg['cluster']}_memory", 'source' => cfg['source']}]
 end
 
 def load_per_cpu(cfg)

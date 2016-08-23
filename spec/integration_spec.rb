@@ -130,7 +130,7 @@ describe '#load_per_cluster' do
     results = load_per_cluster(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.15|load=0.15',
                                              'source' => 'test',
-                                             'name'   => 'cluster_load')
+                                             'name'   => 'cluster_prometheus_load')
   end
 end
 
@@ -145,7 +145,7 @@ describe '#load_per_cluster_minus_n' do
     results = load_per_cluster_minus_n(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.22|load=0.22',
                                              'source' => 'test',
-                                             'name'   => 'cluster_load_minus_n')
+                                             'name'   => 'cluster_prometheus_load_minus_n')
   end
 end
 
@@ -198,5 +198,19 @@ describe '#load_per_cpu' do
     cfg = {'warn' => 2.0, 'crit' => 4.0}
     results = load_per_cpu(cfg)
     expect(results).to include_hash_matching('output' => 'Load: 0.15|load=0.15', 'source' => 'node-exporter1:9100')
+  end
+end
+
+describe '#memory_per_cluster' do
+  it 'checks the memory of the whole cluster' do
+    cfg = {'cluster' => 'prometheus',
+           'warn'    => '80',
+           'crit'    => '90',
+           'source'  => 'test'
+          }
+    results = memory_per_cluster(cfg)
+    expect(results).to include_hash_matching('output' => 'Cluster Memory: 33%|memory=33',
+                                             'source' => 'test',
+                                             'name'   => 'cluster_prometheus_memory')
   end
 end
