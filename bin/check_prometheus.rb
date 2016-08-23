@@ -150,7 +150,7 @@ def custom(check)
   results
 end
 
-if __FILE__ == $0
+if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   results = []
   checks = YAML.load_file(ARGV[0]||'config.yml')
   cfg = checks['config']
