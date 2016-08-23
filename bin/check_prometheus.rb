@@ -142,6 +142,21 @@ def load_per_cluster(cfg)
   [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => 'cluster_load', 'source' => cfg['source']}]
 end
 
+def load_per_cpu(cfg)
+  results = []
+  cpu_counts = {}
+  query('(count(node_cpu{mode="system"})by(instance))')['data']['result'].each do |result|
+    cpu_counts[result['metric']['instance']] = result['value'][1]
+  end
+  query("node_load5")['data']['result'].each do |result|
+    hostname = result['metric']['instance']
+    cpu = result['value'][1].to_f.round(2) / cpu_counts[hostname].to_f
+    status = check(cpu, cfg['warn'], cfg['crit'])
+    results << {'status' => status, 'output' => "Load: #{cpu}|load=#{cpu}", 'name' => 'check_load', 'source' => hostname}
+  end
+  results
+end
+
 
 def equals result, value
   if result.to_f == value.to_f

@@ -193,3 +193,10 @@ describe '#nice_disk_name' do
   end
 end
 
+describe '#load_per_cpu' do
+  it 'returns a list of load values' do
+    cfg = {'warn' => 2.0, 'crit' => 4.0}
+    results = load_per_cpu(cfg)
+    expect(results).to include_hash_matching('output' => 'Load: 0.15|load=0.15', 'source' => 'node-exporter1:9100')
+  end
+end
