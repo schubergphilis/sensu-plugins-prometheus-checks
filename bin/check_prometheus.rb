@@ -184,7 +184,7 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
     }.merge(result)
     if event['source'] =~ /#{cfg['whitelist']}/
       event['source'] = sensu_safe(event['source'])
-      event['name'] = sensu_safe(event['source'])
+      event['name'] = sensu_safe(event['name'])
       if ENV['PROM_DEBUG']
         puts event
       else
