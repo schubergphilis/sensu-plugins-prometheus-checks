@@ -6,6 +6,15 @@ Sensu plugin designed to query prometheus data output from node-exporter
 ## Usage
 `check_prometheus.rb /path/to/config.yml`
 
+## Development and testing
+
+Dependencies: docker, docker-compose
+
+To spinup a development stack and run the integration tests
+`ruby test.rb`
+
+Afterwards you can just run `rspec` to run the tests
+
 ### Config.yml
 Check configuration is defined in the `config.yml` file under the key `checks`
 
