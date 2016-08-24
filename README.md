@@ -95,104 +95,104 @@ checks:
   </tr>
   <tr>
     <td>service</td>
-    <td><li>name: servicename</li></td>
-    <td><li>name: test-service.service</li></td>
+    <td>name: servicename</td>
+    <td>name: test-service.service</td>
   </tr>
   <tr>
     <td>memory</td>
     <td>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
+      warn: warning percentage<br>
+      crit: critical percentage
    </td>
     <td>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
+      warn: 90 <br>
+      crit: 95
    </td>
   </tr>
   <tr>
     <td>load_per_cpu</td>
     <td>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
+      warn: warning percentage <br>
+      crit: critical percentage
    </td>
     <td>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
+      warn: 90 <br>
+      crit: 95
    </td>
   </tr>
   <tr>
     <td>load_per_cluster</td>
     <td>
-      <li>cluster: cluster name</li>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
-      <li>source: name that shows in sensu</li>
+      cluster: cluster name <br>
+      warn: warning percentage <br>
+      crit: critical percentage <br>
+      source: name that shows in sensu
    </td>
     <td>
-      <li>cluster: nodes</li>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
-      <li>source: sbppapik8s</li>
+      cluster: nodes <br>
+      warn: 90 <br>
+      crit: 95 <br>
+      source: sbppapik8s
    </td>
   </tr>
   <tr>
     <td>load_per_cluster_minus_n</td>
     <td>
-      <li>cluster: cluster name</li>
-      <li>minus_n: amount of member failures</li>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
-      <li>source: name that shows in sensu</li>
+      cluster: cluster name <br>
+      minus_n: amount of member failures <br>
+      warn: warning percentage <br>
+      crit: critical percentage <br>
+      source: name that shows in sensu
    </td>
     <td>
-      <li>cluster: nodes</li>
-      <li>minus_n: 1</li>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
-      <li>source: sbppapik8s</li>
+      cluster: nodes <br>
+      minus_n: 1 <br>
+      warn: 90 <br>
+      crit: 95 <br>
+      source: sbppapik8s
    </td>
   </tr>
   <tr>
     <td>inode</td>
     <td>
-      <li>mount: mountpoint</li>
-      <li>name: human readable name</li>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
+      mount: mountpoint <br>
+      name: human readable name <br>
+      warn: warning percentage <br>
+      crit: critical percentage
    </td>
     <td>
-      <li>mount: /var/lib/docker</li>
-      <li>name: docker</li>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
+      mount: /var/lib/docker <br>
+      name: docker <br>
+      warn: 90 <br>
+      crit: 95
    </td>
   </tr>
   <tr>
     <td>disk</td>
     <td>
-      <li>mount: mountpoint</li>
-      <li>name: human readable name</li>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
+      mount: mountpoint <br>
+      name: human readable name <br>
+      warn: warning percentage <br>
+      crit: critical percentage
    </td>
     <td>
-      <li>mount: /var/lib/docker</li>
-      <li>name: docker</li>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
+      mount: /var/lib/docker <br>
+      name: docker <br>
+      warn: 90 <br>
+      crit: 95
    </td>
   </tr>
   <tr>
     <td>disk_all</td>
     <td>
-      <li>ignore_fs: regex of filesystems</li>
-      <li>warn: warning percentage</li>
-      <li>crit: critical percentage</li>
+      ignore_fs: regex of filesystems <br>
+      warn: warning percentage <br>
+      crit: critical percentage
    </td>
     <td>
-      <li>ignore_fs: tmpfs</li>
-      <li>warn: 90</li>
-      <li>crit: 95</li>
+      ignore_fs: tmpfs <br>
+      warn: 90 <br>
+      crit: 95
    </td>
   </tr>
  </table>
