@@ -44,6 +44,22 @@ def percent_query_free(total,available)
   "100-((#{available}/#{total})*100)"
 end
 
+def predict_disk_all(cfg)
+  disks = []
+  days = cfg['days'].to_i * 86400
+  query("predict_linear(node_filesystem_avail{}[24h], #{days}) < 0")['data']['result'].each do |result|
+    hostname = result['metric']['instance']
+    disk = result['metric']['mountpoint']
+    disks << "#{hostname}:#{disk}"
+  end
+  if disks.length == 0
+    {'status' => 0, 'output' => "No disks are predicted to run out of space in the next #{days} days", 'name' => 'predict_disks', 'source' => cfg['source']}
+  else
+    disks = disks.join(',')
+    {'status' => 1, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disks', 'source' => cfg['source']}
+  end
+end
+
 def nice_disk_name(disk)
   if disk == '/'
     'root'

@@ -74,6 +74,10 @@ checks:
     <td>disk_all</td>
     <td>Checks filesystem and inode usage of all mountpoints</td>
   </tr>
+  <tr>
+    <td>predict_disk_all</td>
+    <td>Predicts if any of the disks in prometheus will be full in x days</td>
+  </tr>
  </table>
 
 ## Global Configuration Options
@@ -202,6 +206,15 @@ checks:
       ignore_fs: tmpfs <br>
       warn: 90 <br>
       crit: 95
+   </td>
+  </tr>
+  <tr>
+    <td>predict_disk_all</td>
+    <td>
+      days: prediction days
+   </td>
+    <td>
+      days: 14
    </td>
   </tr>
  </table>
