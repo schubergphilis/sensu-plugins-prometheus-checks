@@ -212,9 +212,11 @@ checks:
     <td>predict_disk_all</td>
     <td>
       days: prediction days
+      source: sensu name
    </td>
     <td>
       days: 14
+      source: sbppapik8s
    </td>
   </tr>
  </table>
