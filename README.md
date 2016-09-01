@@ -22,6 +22,7 @@ Example
 ```
 config:
   reported_by: sbppapik8s
+  occurences: 3
   whitelist: sbppapik8s.*
 checks:
   - service:
@@ -91,6 +92,11 @@ checks:
     <td>reported_by</td>
     <td>sbppapik8s</td>
     <td>hostname that shows up in sensu reported_by field</td>
+  </tr>
+  <tr>
+    <td>occurences</td>
+    <td>3</td>
+    <td>amount of failures before sensu will send an alert</td>
   </tr>
   <tr>
     <td>whitelist</td>

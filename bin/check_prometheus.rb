@@ -218,7 +218,8 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   end
   results.flatten(1).each do |result|
     event = {
-      'reported_by' => cfg['reported_by']
+      'reported_by' => cfg['reported_by'],
+      'occurrences' => cfg['occurences'] || 1
     }.merge(result)
     if event['source'] =~ /#{cfg['whitelist']}/
       event['source'] = sensu_safe(event['source'])

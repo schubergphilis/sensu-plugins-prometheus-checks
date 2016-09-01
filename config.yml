@@ -1,6 +1,7 @@
 #---
 config:
   reported_by: reported_by
+  occurences: 3
   whitelist: .*
 checks:
   - check: service
