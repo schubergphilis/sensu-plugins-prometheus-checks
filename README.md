@@ -23,6 +23,7 @@ Example
 config:
   reported_by: sbppapik8s
   occurences: 3
+  domain: example.com
   whitelist: sbppapik8s.*
 checks:
   - service:

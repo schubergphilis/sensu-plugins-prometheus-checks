@@ -198,7 +198,26 @@ def custom(check)
   results
 end
 
-if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
+def map_nodenames
+  node_map = {}
+  query('node_uname_info')['data']['result'].each do |result|
+    node_map[result['metric']['instance']] = result['metric']['nodename']
+  end
+  node_map
+end
+
+def build_event(event,node_map,cfg)
+  event['reported_by'] = cfg['reported_by']
+  event['occurrences'] = cfg['occurences'] || 1
+  node_name = node_map[event['source']] || event['source']
+  address = "#{node_name}.#{cfg['domain']}"
+  event['source'] = sensu_safe(node_name)
+  event['name'] = sensu_safe(event['name'])
+  event['address'] = sensu_safe(address)
+  event
+end
+
+def run
   results = []
   checks = YAML.load_file(ARGV[0]||'config.yml')
   cfg = checks['config']
@@ -216,14 +235,10 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
       puts "Check: #{check} failed!"
     end
   end
+  node_map = map_nodenames
   results.flatten(1).each do |result|
-    event = {
-      'reported_by' => cfg['reported_by'],
-      'occurrences' => cfg['occurences'] || 1
-    }.merge(result)
-    if event['source'] =~ /#{cfg['whitelist']}/
-      event['source'] = sensu_safe(event['source'])
-      event['name'] = sensu_safe(event['name'])
+    if result['source'] =~ /#{cfg['whitelist']}/
+      event = build_event(result,node_map,cfg)
       if ENV['PROM_DEBUG']
         puts event
       else
@@ -231,5 +246,9 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
       end
     end
   end
+end
+
+if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
+  run
   exit 0
 end
