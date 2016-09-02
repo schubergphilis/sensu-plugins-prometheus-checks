@@ -217,7 +217,7 @@ def build_event(event,node_map,cfg)
   event
 end
 
-if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
+def run
   results = []
   checks = YAML.load_file(ARGV[0]||'config.yml')
   cfg = checks['config']
@@ -246,5 +246,9 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
       end
     end
   end
+end
+
+if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
+  run
   exit 0
 end

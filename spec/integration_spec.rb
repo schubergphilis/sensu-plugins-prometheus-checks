@@ -263,3 +263,22 @@ describe '#build_event' do
                                )
   end
 end
+
+describe '#run' do
+  $event_list = []
+  def send_event(event)
+    $event_list << event
+  end
+
+  it 'does a full e2e test using the config file' do
+    run
+    expect($event_list).to include_hash_matching({"status"=>0,
+                                                  "output"=>"OK: Endpoint is alive and kicking",
+                                                  "source"=>"sbppapik8s-worker1",
+                                                  "name"=>"heartbeat",
+                                                  "reported_by"=>"reported_by_host",
+                                                  "occurrences"=>3,
+                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
+                                                )
+  end
+end
