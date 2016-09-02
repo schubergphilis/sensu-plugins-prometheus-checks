@@ -214,3 +214,52 @@ describe '#memory_per_cluster' do
                                              'name'   => 'cluster_prometheus_memory')
   end
 end
+
+describe '#map_nodenames' do
+  it 'creates a map of instance to nodenames' do
+    results = map_nodenames
+    expect(results).to include('node-exporter1:9100' => 'sbppapik8s-worker1',
+                               'node-exporter2:9100' => 'sbppapik8s-worker2',
+                               'node-exporter3:9100' => 'sbppapik8s-worker3')
+  end
+end
+
+describe '#build_event' do
+  it 'builds an event with replaced values' do
+    cfg = {'reported_by' => 'reported_by_host',
+           'occurences'  => 5,
+           'domain'    => 'example.com'
+          }
+    node_map = {'instance_name' => 'node_name'}
+    event = {'source'        => 'instance_name',
+             'name'          => 'check_name',
+             'extra_field'   => 'value'
+            }
+    results = build_event(event,node_map,cfg)
+    expect(results).to include('address' => 'node_name.example.com',
+                               'source'    => 'node_name',
+                               'name'    => 'check_name',
+                               'extra_field'    => 'value',
+                               'occurrences' => 5,
+                               'reported_by' => 'reported_by_host'
+                               )
+  end
+  it 'uses default values when they cant be found' do
+    cfg = {'reported_by' => 'reported_by_host',
+           'domain'    => 'example.com'
+          }
+    node_map = {'not_instance_name' => 'node_name'}
+    event = {'source'        => 'instance_name',
+             'name'          => 'check_name',
+             'extra_field'   => 'value'
+            }
+    results = build_event(event,node_map,cfg)
+    expect(results).to include('address' => 'instance_name.example.com',
+                               'source'    => 'instance_name',
+                               'name'    => 'check_name',
+                               'extra_field'    => 'value',
+                               'occurrences' => 1,
+                               'reported_by' => 'reported_by_host'
+                               )
+  end
+end
