@@ -2,6 +2,8 @@ require_relative '../bin/check_prometheus'
 
 require 'rspec/expectations'
 
+ENV['PROMETHEUS_ENDPOINT'] = 'localhost:19090'
+
 def slice(hash, *keys)
   Hash[ [keys, hash.values_at(*keys)].transpose]
 end
@@ -271,7 +273,10 @@ describe '#run' do
   end
 
   it 'does a full e2e test using the config file' do
-    run
+    checks = YAML.load_file('config.yml')
+    status, output = run(checks)
+    expect(status).to eql 1
+    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_xenserver-pv-version.service: Output: Service: xenserver-pv-version.service: Status: 2')
     expect($event_list).to include_hash_matching({"status"=>0,
                                                   "output"=>"OK: Endpoint is alive and kicking",
                                                   "source"=>"sbppapik8s-worker1",
@@ -280,5 +285,18 @@ describe '#run' do
                                                   "occurrences"=>3,
                                                   "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
                                                 )
+  end
+  it 'returns a warning if a check fails' do
+    checks = YAML.load_file('config.yml')
+    status, output = run(checks)
+    expect(status).to eql 1
+    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_xenserver-pv-version.service: Output: Service: xenserver-pv-version.service: Status: 2')
+  end
+  it 'returns succussfully if all checks pass' do
+    checks = YAML.load_file('config.yml')
+    checks['config']['whitelist'] = 'sbppapik8s-worker1'
+    status, output = run(checks)
+    expect(status).to eql 0
+    expect(output).to include('OK: ')
   end
 end

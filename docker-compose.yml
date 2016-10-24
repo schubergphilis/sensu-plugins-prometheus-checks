@@ -1,48 +1,53 @@
 version: '2'
 
+networks:
+  default:
+    external:
+      name: check_prometheus
+
 services:
   promtheues:
-    image: quay.io/prometheus/prometheus:v1.0.1
+    build:
+      dockerfile: $PWD/dockerfiles/prometheus
+      context: ./prometheus/
     container_name: prometheus
-    volumes:
-      - ./prometheus/:/etc/prometheus/
     command:
       - '-config.file=/etc/prometheus/prometheus.yml'
       - '-storage.local.path=/prometheus'
     expose:
-      - 9090
+      - 19090
     ports:
-      - 9090:9090
+      - 19090:9090
   node-exporter1:
-    image: prom/node-exporter
+    build:
+      dockerfile: $PWD/dockerfiles/node
+      context: ./node-exporter/node1
     expose:
-      - 9100
+      - 19100
     ports:
-      - 9100:9100
-    volumes:
-      - ./node-exporter/node1/:/etc/node-exporter/
+      - 19100:9100
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
   node-exporter2:
-    image: prom/node-exporter
+    build:
+      dockerfile: $PWD/dockerfiles/node
+      context: ./node-exporter/node2
     expose:
-      - 9101
+      - 19101
     ports:
-      - 9101:9100
-    volumes:
-      - ./node-exporter/node2/:/etc/node-exporter/
+      - 19101:9100
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
   node-exporter3:
-    image: prom/node-exporter
+    build:
+      dockerfile: $PWD/dockerfiles/node
+      context: ./node-exporter/node3
     expose:
-      - 9102
+      - 19102
     ports:
-      - 9102:9100
-    volumes:
-      - ./node-exporter/node3/:/etc/node-exporter/
+      - 19102:9100
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"

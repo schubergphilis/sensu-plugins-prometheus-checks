@@ -217,9 +217,10 @@ def build_event(event,node_map,cfg)
   event
 end
 
-def run
+def run(checks)
   results = []
-  checks = YAML.load_file(ARGV[0]||'config.yml')
+  status = 0
+  failed_checks = []
   cfg = checks['config']
   checks['checks'].each do |check|
     begin
@@ -244,11 +245,24 @@ def run
       else
         send_event(event)
       end
+      if event['status'] != 0
+        failed_checks << "Source: #{event['source']}: Check: #{event['name']}: Output: #{event['output']}: Status: #{event['status']}"
+      end
     end
   end
+  if failed_checks.length != 0
+    status = 1
+    output = failed_checks.join(' ')
+  else
+    status = 0
+    output = "OK: Ran #{results.length} checks succesfully!"
+  end
+  return status, output
 end
 
 if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
-  run
-  exit 0
+  checks = YAML.load_file(ARGV[0]||'config.yml')
+  status, output = run(checks)
+  puts output
+  exit(status)
 end

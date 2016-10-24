@@ -1,0 +1,9 @@
+image: registry.services.schubergphilis.com:5000/saas/kitchen
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - ./test.sh
