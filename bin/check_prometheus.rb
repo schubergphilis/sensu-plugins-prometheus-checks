@@ -200,7 +200,7 @@ end
 
 def map_nodenames
   node_map = {}
-  query('node_uname_info')['data']['result'].each do |result|
+  query('max_over_time(node_uname_info[1d])')['data']['result'].each do |result|
     node_map[result['metric']['instance']] = result['metric']['nodename']
   end
   node_map
