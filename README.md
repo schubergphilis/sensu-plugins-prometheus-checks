@@ -124,7 +124,11 @@ checks:
   </tr>
   <tr>
     <td>service</td>
-    <td>name: servicename</td>
+    <td>
+        name: servicename<br>
+        state: active|deactivating|failed|inactive (default:active)<br>
+        state_required: 0|1 (default:1)
+    </td>
     <td>name: test-service.service</td>
   </tr>
   <tr>

@@ -10,6 +10,12 @@ checks:
       name: xenserver-pv-version.service
   - check: service
     cfg:
+      name: running.service
+  - check: service
+    cfg:
+      name: not-running.service
+  - check: service
+    cfg:
       name: kube-controller-manager.service
   - check: service
     cfg:

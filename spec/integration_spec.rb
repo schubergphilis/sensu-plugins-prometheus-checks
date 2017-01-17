@@ -113,13 +113,31 @@ describe '#inode' do
 end
 
 describe '#service' do
-  it 'checks a service is active' do
-    cfg = {'name' => 'xenserver-pv-version.service'}
+  it 'checks a service not running' do
+    cfg = {'name' => 'not-running.service'}
     results = service(cfg)
-    expect(results).to include_hash_matching('output' => 'Service: xenserver-pv-version.service',
+    expect(results).to include_hash_matching('output' => 'Service: not-running.service (active=0)',
+                                             'status' => 2,
                                              'source' => 'node-exporter1:9100',
-                                             'name'   => 'check_service_xenserver-pv-version.service')
+                                             'name'   => 'check_service_not-running.service')
   end
+  it 'checks a service running' do
+    cfg = {'name' => 'running.service'}
+    results = service(cfg)
+    expect(results).to include_hash_matching('output' => 'Service: running.service (active=1)',
+                                             'status' => 0,
+                                             'source' => 'node-exporter1:9100',
+                                             'name'   => 'check_service_running.service')
+  end
+  it 'checks a service failure' do
+    cfg = {'name' => 'failed.service', 'state' => 'failed', 'state_required' => 0 }
+    results = service(cfg)
+    expect(results).to include_hash_matching('output' => 'Service: failed.service (failed=1)',
+                                             'status' => 2,
+                                             'source' => 'node-exporter1:9100',
+                                             'name'   => 'check_service_failed.service')
+  end
+
 end
 
 describe '#load_per_cluster' do
@@ -276,7 +294,7 @@ describe '#run' do
     checks = YAML.load_file('config.yml')
     status, output = run(checks)
     expect(status).to eql 1
-    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_xenserver-pv-version.service: Output: Service: xenserver-pv-version.service: Status: 2')
+    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')
     expect($event_list).to include_hash_matching({"status"=>0,
                                                   "output"=>"OK: Endpoint is alive and kicking",
                                                   "source"=>"sbppapik8s-worker1",
@@ -290,7 +308,7 @@ describe '#run' do
     checks = YAML.load_file('config.yml')
     status, output = run(checks)
     expect(status).to eql 1
-    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_xenserver-pv-version.service: Output: Service: xenserver-pv-version.service: Status: 2')
+    expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')
   end
   it 'returns succussfully if all checks pass' do
     checks = YAML.load_file('config.yml')
