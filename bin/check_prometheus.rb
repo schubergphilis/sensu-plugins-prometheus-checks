@@ -127,13 +127,19 @@ def inode(cfg)
 end
 
 def service(cfg)
+  defaults = {
+    'state'=> 'active',
+    'state_required'=> 1
+  }
+  cfg = defaults.merge(cfg)
+
   results = []
   name = cfg['name']
-  query("node_systemd_unit_state{name='#{name}',state='active'}")['data']['result'].each do |result|
+  query("node_systemd_unit_state{name='#{name}',state='#{cfg['state']}'}")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     state = result['value'][1].to_i
-    status = equals(state, 1)
-    results << {'status' => status, 'output' => "Service: #{name}", 'name' => "check_service_#{name}", 'source' => hostname}
+    status = equals(state, cfg['state_required'])
+    results << {'status' => status, 'output' => "Service: #{name} (#{cfg['state']}=#{state})", 'name' => "check_service_#{name}", 'source' => hostname}
   end
   results
 end
