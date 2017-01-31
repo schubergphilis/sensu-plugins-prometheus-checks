@@ -254,6 +254,10 @@ def run(checks)
       if event['status'] != 0
         failed_checks << "Source: #{event['source']}: Check: #{event['name']}: Output: #{event['output']}: Status: #{event['status']}"
       end
+    else
+      if ENV['PROM_DEBUG']
+        puts "Event dropped because source: #{result['source']} did not match whitelist: #{cfg['whitelist']} event: #{event}"
+      end
     end
   end
   if failed_checks.length != 0
