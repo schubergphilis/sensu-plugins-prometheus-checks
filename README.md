@@ -6,6 +6,9 @@ Sensu plugin designed to query prometheus data output from node-exporter
 ## Usage
 ```
 check_prometheus.rb /path/to/config.yml
+
+# Debug mode to output all json and blacklisted checks
+PROM_DEBUG=true check_prometheus.rb /path/to/config.yml
 ```
 
 ## Development and testing

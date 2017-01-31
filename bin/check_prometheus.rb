@@ -244,8 +244,8 @@ def run(checks)
   end
   node_map = map_nodenames
   results.flatten(1).each do |result|
-    if result['source'] =~ /#{cfg['whitelist']}/
-      event = build_event(result,node_map,cfg)
+    event = build_event(result,node_map,cfg)
+    if event['source'] =~ /#{cfg['whitelist']}/
       if ENV['PROM_DEBUG']
         puts event
       else
@@ -253,6 +253,10 @@ def run(checks)
       end
       if event['status'] != 0
         failed_checks << "Source: #{event['source']}: Check: #{event['name']}: Output: #{event['output']}: Status: #{event['status']}"
+      end
+    else
+      if ENV['PROM_DEBUG']
+        puts "Event dropped because source: #{result['source']} did not match whitelist: #{cfg['whitelist']} event: #{event}"
       end
     end
   end
