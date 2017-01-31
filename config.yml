@@ -3,7 +3,7 @@ config:
   reported_by: reported_by_host
   domain: services.schubergphilis.com
   occurences: 3
-  whitelist: .*
+  whitelist: sbppapik8s
 checks:
   - check: service
     cfg:

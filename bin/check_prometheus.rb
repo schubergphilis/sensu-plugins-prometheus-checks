@@ -244,8 +244,8 @@ def run(checks)
   end
   node_map = map_nodenames
   results.flatten(1).each do |result|
-    if result['source'] =~ /#{cfg['whitelist']}/
-      event = build_event(result,node_map,cfg)
+    event = build_event(result,node_map,cfg)
+    if event['source'] =~ /#{cfg['whitelist']}/
       if ENV['PROM_DEBUG']
         puts event
       else

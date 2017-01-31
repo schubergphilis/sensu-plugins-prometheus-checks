@@ -290,6 +290,10 @@ describe '#run' do
     $event_list << event
   end
 
+  before(:each) do
+    $event_list = []
+  end
+
   it 'does a full e2e test using the config file' do
     checks = YAML.load_file('config.yml')
     status, output = run(checks)
@@ -311,10 +315,67 @@ describe '#run' do
     expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')
   end
   it 'returns succussfully if all checks pass' do
-    checks = YAML.load_file('config.yml')
-    checks['config']['whitelist'] = 'sbppapik8s-worker1'
+    checks = {
+      "config" => {
+        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "sbppapik8s-worker1"
+      },
+      "checks" => [{
+        "check" => "service", "cfg" => {
+          "name" => "running.service"
+        }
+      }],
+      "custom" => [{
+        "name" => "heartbeat", "query" => "up",
+        "check" => {
+          "type" => "equals", "value" => 1
+        },
+        "msg" => {
+          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        }
+      }]
+    }
     status, output = run(checks)
     expect(status).to eql 0
     expect(output).to include('OK: ')
+    expect($event_list).to include_hash_matching({"status"=>0,
+                                                  "output"=>"Service: running.service (active=1)",
+                                                  "source"=>"sbppapik8s-worker1",
+                                                  "name"=>"check_service_running.service",
+                                                  "reported_by"=>"reported_by_host",
+                                                  "occurrences"=>3,
+                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
+                                                )
+  end
+  it 'drops a check if it does not match the whitelist' do
+    checks = {
+      "config" => {
+        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "notmatchinganything"
+      },
+      "checks" => [{
+        "check" => "service", "cfg" => {
+          "name" => "running.service"
+        }
+      }],
+      "custom" => [{
+        "name" => "heartbeat", "query" => "up",
+        "check" => {
+          "type" => "equals", "value" => 1
+        },
+        "msg" => {
+          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        }
+      }]
+    }
+    status, output = run(checks)
+    expect(status).to eql(0)
+    expect(output).to include('OK: ')
+    expect($event_list).not_to include_hash_matching({"status"=>0,
+                                                  "output"=>"Service: running.service (active=1)",
+                                                  "source"=>"sbppapik8s-worker1",
+                                                  "name"=>"check_service_running.service",
+                                                  "reported_by"=>"reported_by_host",
+                                                  "occurrences"=>3,
+                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
+                                                )
   end
 end
