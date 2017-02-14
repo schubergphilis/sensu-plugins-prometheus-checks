@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative '../bin/check_prometheus'
 
 require 'rspec/expectations'
@@ -35,7 +36,7 @@ describe '#equals' do
   end
 end
 
-describe '#query' do
+describe '#query', :vcr do
   it 'can do a query' do
     expect(query('up')).to include('status' => 'success')
   end
@@ -50,7 +51,7 @@ describe '#sensu_safe' do
   end
 end
 
-describe '#memory' do
+describe '#memory', :vcr do
   it 'returns a list of memory values' do
     cfg = {'warn' => 90, 'crit' => 95}
     results = memory(cfg)
@@ -60,7 +61,7 @@ describe '#memory' do
   end
 end
 
-describe '#disk' do
+describe '#disk', :vcr do
   it 'returns a list of disk values' do
     cfg = {'mount' => '/',
            'name' => 'root',
@@ -73,7 +74,7 @@ describe '#disk' do
   end
 end
 
-describe '#disk_all' do
+describe '#disk_all', :vcr do
   it 'returns a list of disk values' do
     cfg = {'ignore_fs' => 'tmpfs',
            'warn' => 90,
@@ -99,7 +100,7 @@ describe '#disk_all' do
   end
 end
 
-describe '#inode' do
+describe '#inode', :vcr do
   it 'returns a list of inode values' do
     cfg = {'mount' => '/usr',
            'name' => 'usr',
@@ -112,7 +113,7 @@ describe '#inode' do
   end
 end
 
-describe '#service' do
+describe '#service', :vcr do
   it 'checks a service not running' do
     cfg = {'name' => 'not-running.service'}
     results = service(cfg)
@@ -140,7 +141,7 @@ describe '#service' do
 
 end
 
-describe '#load_per_cluster' do
+describe '#load_per_cluster', :vcr do
   it 'checks the load of the whole cluster' do
     cfg = {'cluster' => 'prometheus',
            'warn'    => '1.0',
@@ -154,7 +155,7 @@ describe '#load_per_cluster' do
   end
 end
 
-describe '#load_per_cluster_minus_n' do
+describe '#load_per_cluster_minus_n', :vcr do
   it 'checks the load of the whole cluster' do
     cfg = {'cluster' => 'prometheus',
            'minus_n' => '1',
@@ -169,7 +170,7 @@ describe '#load_per_cluster_minus_n' do
   end
 end
 
-describe '#custom' do
+describe '#custom', :vcr do
   it 'performs a custom prometheus query' do
     cfg = {'name' => 'heartbeat',
            'query' => 'up',
@@ -190,7 +191,7 @@ describe '#custom' do
   end
 end
 
-describe '#precent_query_free' do
+describe '#precent_query_free', :vcr do
   it 'creates a prometheus query' do
     total = 'total_something{hello="world"}'
     available = 'available_something{world="hello"}'
@@ -213,7 +214,7 @@ describe '#nice_disk_name' do
   end
 end
 
-describe '#load_per_cpu' do
+describe '#load_per_cpu', :vcr do
   it 'returns a list of load values' do
     cfg = {'warn' => 2.0, 'crit' => 4.0}
     results = load_per_cpu(cfg)
@@ -221,7 +222,7 @@ describe '#load_per_cpu' do
   end
 end
 
-describe '#memory_per_cluster' do
+describe '#memory_per_cluster', :vcr do
   it 'checks the memory of the whole cluster' do
     cfg = {'cluster' => 'prometheus',
            'warn'    => '80',
@@ -235,7 +236,7 @@ describe '#memory_per_cluster' do
   end
 end
 
-describe '#map_nodenames' do
+describe '#map_nodenames', :vcr do
   it 'creates a map of instance to nodenames' do
     results = map_nodenames
     expect(results).to include('node-exporter1:9100' => 'sbppapik8s-worker1',
@@ -244,7 +245,7 @@ describe '#map_nodenames' do
   end
 end
 
-describe '#build_event' do
+describe '#build_event', :vcr do
   it 'builds an event with replaced values' do
     cfg = {'reported_by' => 'reported_by_host',
            'occurences'  => 5,
@@ -284,7 +285,7 @@ describe '#build_event' do
   end
 end
 
-describe '#run' do
+describe '#run', :vcr do
   $event_list = []
   def send_event(event)
     $event_list << event

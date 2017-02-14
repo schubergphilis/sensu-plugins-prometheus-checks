@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:19090/api/v1/query?query=100-((node_memory_MemAvailable/node_memory_MemTotal)*100)
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, Origin
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Date
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 14 Feb 2017 06:59:42 GMT
+      Content-Length:
+      - '394'
+    body:
+      encoding: UTF-8
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter2:9100","job":"prometheus"},"value":[1487055582.494,"29.718866272118746"]},{"metric":{"instance":"node-exporter1:9100","job":"prometheus"},"value":[1487055582.494,"41.65704379520997"]},{"metric":{"instance":"node-exporter3:9100","job":"prometheus"},"value":[1487055582.494,"29.718866272118746"]}]}}'
+    http_version: 
+  recorded_at: Tue, 14 Feb 2017 06:59:42 GMT
+recorded_with: VCR 3.0.3

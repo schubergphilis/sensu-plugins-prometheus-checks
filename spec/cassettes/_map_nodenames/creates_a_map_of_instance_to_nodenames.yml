@@ -1,0 +1,43 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:19090/api/v1/query?query=max_over_time(node_uname_info%5B1d%5D)
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, Origin
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Date
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 14 Feb 2017 06:59:42 GMT
+      Content-Length:
+      - '860'
+    body:
+      encoding: UTF-8
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"domainname":"(none)","instance":"node-exporter2:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker2","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1487055582.754,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter1:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker1.fakedomain.tld","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1487055582.754,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter3:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker3","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1487055582.754,"1"]}]}}'
+    http_version: 
+  recorded_at: Tue, 14 Feb 2017 06:59:42 GMT
+recorded_with: VCR 3.0.3

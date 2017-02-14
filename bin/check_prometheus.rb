@@ -19,11 +19,13 @@ def sensu_safe(string)
   string.gsub(/[^\w\.-]+/,'_')
 end
 
+# :nocov:
 def send_event(event)
   s = TCPSocket.open('localhost', 3030)
   s.puts JSON.generate(event)
   s.close
 end
+# :nocov:
 
 def check result, warn, crit
   result = result.to_f
@@ -270,9 +272,11 @@ def run(checks)
   return status, output
 end
 
+# :nocov:
 if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   checks = YAML.load_file(ARGV[0]||'config.yml')
   status, output = run(checks)
   puts output
   exit(status)
 end
+# :nocov:
