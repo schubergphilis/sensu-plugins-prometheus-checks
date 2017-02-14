@@ -6,7 +6,7 @@ require 'yaml'
 require 'cgi'
 
 def query_prometheus(query)
-  query= CGI.escape(query)
+  query = CGI.escape(query)
   host, port = (ENV['PROMETHEUS_ENDPOINT'] || 'localhost:9090').split(':')
   http = Net::HTTP.new(host, port)
   http.read_timeout = 3
