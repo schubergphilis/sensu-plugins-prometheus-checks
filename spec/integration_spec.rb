@@ -6,7 +6,7 @@ require 'rspec/expectations'
 ENV['PROMETHEUS_ENDPOINT'] = 'localhost:19090'
 
 def slice(hash, *keys)
-  Hash[ [keys, hash.values_at(*keys)].transpose]
+  Hash[[keys, hash.values_at(*keys)].transpose]
 end
 
 RSpec::Matchers.define :include_hash_matching do |expected|
@@ -17,22 +17,22 @@ end
 
 describe '#check' do
   it 'checks if value is ok' do
-    expect(check(3,4,5)).to equal(0)
+    expect(check(3, 4, 5)).to equal(0)
   end
   it 'checks if value is warning' do
-    expect(check(4.1,4,5)).to equal(1)
+    expect(check(4.1, 4, 5)).to equal(1)
   end
   it 'checks if value is critical' do
-    expect(check(6,4,5)).to equal(2)
+    expect(check(6, 4, 5)).to equal(2)
   end
 end
 
 describe '#equals' do
   it 'checks if value is equal' do
-    expect(equals(1,1)).to equal(0)
+    expect(equals(1, 1)).to equal(0)
   end
   it 'checks if value is not equal' do
-    expect(equals(1,2)).to equal(2)
+    expect(equals(1, 2)).to equal(2)
   end
 end
 
@@ -53,7 +53,7 @@ end
 
 describe '#memory', :vcr do
   it 'returns a list of memory values' do
-    cfg = {'warn' => 90, 'crit' => 95}
+    cfg = { 'warn' => 90, 'crit' => 95 }
     results = memory(cfg)
     expect(results).to include_hash_matching('output' => 'Memory 41%|memory=41', 'source' => 'node-exporter1:9100')
     expect(results).to include_hash_matching('output' => 'Memory 29%|memory=29', 'source' => 'node-exporter2:9100')
@@ -63,10 +63,10 @@ end
 
 describe '#disk', :vcr do
   it 'returns a list of disk values' do
-    cfg = {'mount' => '/',
-           'name' => 'root',
-           'warn' => 90,
-           'crit' => 95}
+    cfg = { 'mount' => '/',
+            'name' => 'root',
+            'warn' => 90,
+            'crit' => 95 }
     results = disk(cfg)
     expect(results).to include_hash_matching('output' => 'Disk: 18%, Mountpoint: / |disk=18',
                                              'source' => 'node-exporter1:9100',
@@ -76,9 +76,9 @@ end
 
 describe '#disk_all', :vcr do
   it 'returns a list of disk values' do
-    cfg = {'ignore_fs' => 'tmpfs',
-           'warn' => 90,
-           'crit' => 95}
+    cfg = { 'ignore_fs' => 'tmpfs',
+            'warn' => 90,
+            'crit' => 95 }
     results = disk_all(cfg)
     expect(results).to include_hash_matching('output' => 'Disk: /, Usage: 18% |disk=18',
                                              'source' => 'node-exporter1:9100',
@@ -92,9 +92,9 @@ describe '#disk_all', :vcr do
     expect(results).not_to include_hash_matching('name' => 'check_disk_run')
   end
   it 'allows overriding the ignore_fs' do
-    cfg = {'ignore_fs' => 'test',
-           'warn' => 90,
-           'crit' => 95}
+    cfg = { 'ignore_fs' => 'test',
+            'warn' => 90,
+            'crit' => 95 }
     results = disk_all(cfg)
     expect(results).to include_hash_matching('name' => 'check_disk_run')
   end
@@ -102,10 +102,10 @@ end
 
 describe '#inode', :vcr do
   it 'returns a list of inode values' do
-    cfg = {'mount' => '/usr',
-           'name' => 'usr',
-           'warn' => 90,
-           'crit' => 95}
+    cfg = { 'mount' => '/usr',
+            'name' => 'usr',
+            'warn' => 90,
+            'crit' => 95 }
     results = inode(cfg)
     expect(results).to include_hash_matching('output' => 'Disk: /usr, Inodes: 5% |inodes=5',
                                              'source' => 'node-exporter1:9100',
@@ -115,8 +115,8 @@ end
 
 describe '#predict_disk_all', :vcr do
   it 'predicts no disks getting full ' do
-    cfg = {'days' => '30',
-           'source' => 'test123'}
+    cfg = { 'days' => '30',
+            'source' => 'test123' }
     results = predict_disk_all(cfg)
     expect(results).to eql('output' => 'No disks are predicted to run out of space in the next 2592000 days',
                            'name' => 'predict_disks',
@@ -124,8 +124,8 @@ describe '#predict_disk_all', :vcr do
                            'status' => 0)
   end
   it 'predicts a disk getting full' do
-    cfg = {'days' => '30',
-           'source' => 'test123'}
+    cfg = { 'days' => '30',
+            'source' => 'test123' }
     results = predict_disk_all(cfg)
     expect(results).to eql('output' => 'Disks predicted to run out of space in the next 2592000 days: node-exporter1:9100:/,node-exporter1:9100:/var/lib/docker',
                            'name' => 'predict_disks',
@@ -136,7 +136,7 @@ end
 
 describe '#service', :vcr do
   it 'checks a service not running' do
-    cfg = {'name' => 'not-running.service'}
+    cfg = { 'name' => 'not-running.service' }
     results = service(cfg)
     expect(results).to include_hash_matching('output' => 'Service: not-running.service (active=0)',
                                              'status' => 2,
@@ -144,7 +144,7 @@ describe '#service', :vcr do
                                              'name'   => 'check_service_not-running.service')
   end
   it 'checks a service running' do
-    cfg = {'name' => 'running.service'}
+    cfg = { 'name' => 'running.service' }
     results = service(cfg)
     expect(results).to include_hash_matching('output' => 'Service: running.service (active=1)',
                                              'status' => 0,
@@ -152,22 +152,21 @@ describe '#service', :vcr do
                                              'name'   => 'check_service_running.service')
   end
   it 'checks a service failure' do
-    cfg = {'name' => 'failed.service', 'state' => 'failed', 'state_required' => 0 }
+    cfg = { 'name' => 'failed.service', 'state' => 'failed', 'state_required' => 0 }
     results = service(cfg)
     expect(results).to include_hash_matching('output' => 'Service: failed.service (failed=1)',
                                              'status' => 2,
                                              'source' => 'node-exporter1:9100',
                                              'name'   => 'check_service_failed.service')
   end
-
 end
 
 describe '#load_per_cluster', :vcr do
   it 'checks the load of the whole cluster' do
-    cfg = {'cluster' => 'prometheus',
-           'warn'    => '1.0',
-           'crit'    => '2.0',
-           'source'  => 'test'
+    cfg = { 'cluster' => 'prometheus',
+            'warn'    => '1.0',
+            'crit'    => '2.0',
+            'source'  => 'test'
           }
     results = load_per_cluster(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.15|load=0.15',
@@ -178,11 +177,11 @@ end
 
 describe '#load_per_cluster_minus_n', :vcr do
   it 'checks the load of the whole cluster' do
-    cfg = {'cluster' => 'prometheus',
-           'minus_n' => '1',
-           'warn'    => '1.0',
-           'crit'    => '2.0',
-           'source'  => 'test'
+    cfg = { 'cluster' => 'prometheus',
+            'minus_n' => '1',
+            'warn'    => '1.0',
+            'crit'    => '2.0',
+            'source'  => 'test'
           }
     results = load_per_cluster_minus_n(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.22|load=0.22',
@@ -193,16 +192,16 @@ end
 
 describe '#custom', :vcr do
   it 'performs a custom prometheus query' do
-    cfg = {'name' => 'heartbeat',
-           'query' => 'up',
-           'check' => {
-             'type' => 'equals',
-             'value' => 1
-           },
-           'msg'  => {
-             0 => 'OK: Endpoint is alive and kicking',
-             1 => 'CRIT: Endpoints not reachable!'
-           }
+    cfg = { 'name' => 'heartbeat',
+            'query' => 'up',
+            'check' => {
+              'type' => 'equals',
+              'value' => 1
+            },
+            'msg' => {
+              0 => 'OK: Endpoint is alive and kicking',
+              1 => 'CRIT: Endpoints not reachable!'
+            }
           }
     results = custom(cfg)
     expect(results).to include_hash_matching('output' => 'OK: Endpoint is alive and kicking',
@@ -216,12 +215,12 @@ describe '#precent_query_free', :vcr do
   it 'creates a prometheus query' do
     total = 'total_something{hello="world"}'
     available = 'available_something{world="hello"}'
-    expect(percent_query_free(total,available)).to eq('100-((available_something{world="hello"}/total_something{hello="world"})*100)')
+    expect(percent_query_free(total, available)).to eq('100-((available_something{world="hello"}/total_something{hello="world"})*100)')
   end
   it 'accurately calculates the percentage free' do
     total = '100'
     available = '30'
-    result = query(percent_query_free(total,available))
+    result = query(percent_query_free(total, available))
     expect(result['data']['result'][1]).to eq('70')
   end
 end
@@ -237,7 +236,7 @@ end
 
 describe '#load_per_cpu', :vcr do
   it 'returns a list of load values' do
-    cfg = {'warn' => 2.0, 'crit' => 4.0}
+    cfg = { 'warn' => 2.0, 'crit' => 4.0 }
     results = load_per_cpu(cfg)
     expect(results).to include_hash_matching('output' => 'Load: 0.15|load=0.15', 'source' => 'node-exporter1:9100')
   end
@@ -245,10 +244,10 @@ end
 
 describe '#memory_per_cluster', :vcr do
   it 'checks the memory of the whole cluster' do
-    cfg = {'cluster' => 'prometheus',
-           'warn'    => '80',
-           'crit'    => '90',
-           'source'  => 'test'
+    cfg = { 'cluster' => 'prometheus',
+            'warn'    => '80',
+            'crit'    => '90',
+            'source'  => 'test'
           }
     results = memory_per_cluster(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Memory: 33%|memory=33',
@@ -268,41 +267,41 @@ end
 
 describe '#build_event', :vcr do
   it 'builds an event with replaced values' do
-    cfg = {'reported_by' => 'reported_by_host',
-           'occurences'  => 5,
-           'domain'    => 'example.com'
+    cfg = { 'reported_by' => 'reported_by_host',
+            'occurences' => 5,
+            'domain' => 'example.com'
           }
-    node_map = {'instance_name' => 'node_name'}
-    event = {'source'        => 'instance_name',
-             'name'          => 'check_name',
-             'extra_field'   => 'value'
+    node_map = { 'instance_name' => 'node_name' }
+    event = { 'source' => 'instance_name',
+              'name'          => 'check_name',
+              'extra_field'   => 'value'
             }
-    results = build_event(event,node_map,cfg)
+    results = build_event(event, node_map, cfg)
     expect(results).to include('address' => 'node_name.example.com',
-                               'source'    => 'node_name',
-                               'name'    => 'check_name',
-                               'extra_field'    => 'value',
+                               'source' => 'node_name',
+                               'name' => 'check_name',
+                               'extra_field' => 'value',
                                'occurrences' => 5,
                                'reported_by' => 'reported_by_host'
-                               )
+                              )
   end
   it 'uses default values when they cant be found' do
-    cfg = {'reported_by' => 'reported_by_host',
-           'domain'    => 'example.com'
+    cfg = { 'reported_by' => 'reported_by_host',
+            'domain' => 'example.com'
           }
-    node_map = {'not_instance_name' => 'node_name'}
-    event = {'source'        => 'instance_name',
-             'name'          => 'check_name',
-             'extra_field'   => 'value'
+    node_map = { 'not_instance_name' => 'node_name' }
+    event = { 'source' => 'instance_name',
+              'name'          => 'check_name',
+              'extra_field'   => 'value'
             }
-    results = build_event(event,node_map,cfg)
+    results = build_event(event, node_map, cfg)
     expect(results).to include('address' => 'instance_name.example.com',
-                               'source'    => 'instance_name',
-                               'name'    => 'check_name',
-                               'extra_field'    => 'value',
+                               'source' => 'instance_name',
+                               'name' => 'check_name',
+                               'extra_field' => 'value',
                                'occurrences' => 1,
                                'reported_by' => 'reported_by_host'
-                               )
+                              )
   end
 end
 
@@ -340,13 +339,13 @@ describe '#run', :vcr do
     status, output = run(checks)
     expect(status).to eql 1
     expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')
-    expect($event_list).to include_hash_matching({"status"=>0,
-                                                  "output"=>"OK: Endpoint is alive and kicking",
-                                                  "source"=>"sbppapik8s-worker1",
-                                                  "name"=>"heartbeat",
-                                                  "reported_by"=>"reported_by_host",
-                                                  "occurrences"=>3,
-                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
+    expect($event_list).to include_hash_matching('status' => 0,
+                                                 'output' => 'OK: Endpoint is alive and kicking',
+                                                 'source' => 'sbppapik8s-worker1',
+                                                 'name' => 'heartbeat',
+                                                 'reported_by' => 'reported_by_host',
+                                                 'occurrences' => 3,
+                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
                                                 )
   end
   it 'returns a warning if a check fails' do
@@ -357,86 +356,86 @@ describe '#run', :vcr do
   end
   it 'returns succussfully if all checks pass' do
     checks = {
-      "config" => {
-        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "sbppapik8s-worker1"
+      'config' => {
+        'reported_by' => 'reported_by_host', 'domain' => 'services.schubergphilis.com', 'occurences' => 3, 'whitelist' => 'sbppapik8s-worker1'
       },
-      "checks" => [{
-        "check" => "service", "cfg" => {
-          "name" => "running.service"
+      'checks' => [{
+        'check' => 'service', 'cfg' => {
+          'name' => 'running.service'
         }
       }],
-      "custom" => [{
-        "name" => "heartbeat", "query" => "up",
-        "check" => {
-          "type" => "equals", "value" => 1
+      'custom' => [{
+        'name' => 'heartbeat', 'query' => 'up',
+        'check' => {
+          'type' => 'equals', 'value' => 1
         },
-        "msg" => {
-          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        'msg' => {
+          0 => 'OK: Endpoint is alive and kicking', 2 => 'CRIT: Endpoints not reachable!'
         }
       }]
     }
     status, output = run(checks)
     expect(status).to eql 0
     expect(output).to include('OK: ')
-    expect($event_list).to include_hash_matching({"status"=>0,
-                                                  "output"=>"Service: running.service (active=1)",
-                                                  "source"=>"sbppapik8s-worker1",
-                                                  "name"=>"check_service_running.service",
-                                                  "reported_by"=>"reported_by_host",
-                                                  "occurrences"=>3,
-                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
+    expect($event_list).to include_hash_matching('status' => 0,
+                                                 'output' => 'Service: running.service (active=1)',
+                                                 'source' => 'sbppapik8s-worker1',
+                                                 'name' => 'check_service_running.service',
+                                                 'reported_by' => 'reported_by_host',
+                                                 'occurrences' => 3,
+                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
                                                 )
   end
   it 'drops a check if it does not match the whitelist' do
     checks = {
-      "config" => {
-        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "notmatchinganything"
+      'config' => {
+        'reported_by' => 'reported_by_host', 'domain' => 'services.schubergphilis.com', 'occurences' => 3, 'whitelist' => 'notmatchinganything'
       },
-      "checks" => [{
-        "check" => "service", "cfg" => {
-          "name" => "running.service"
+      'checks' => [{
+        'check' => 'service', 'cfg' => {
+          'name' => 'running.service'
         }
       }],
-      "custom" => [{
-        "name" => "heartbeat", "query" => "up",
-        "check" => {
-          "type" => "equals", "value" => 1
+      'custom' => [{
+        'name' => 'heartbeat', 'query' => 'up',
+        'check' => {
+          'type' => 'equals', 'value' => 1
         },
-        "msg" => {
-          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        'msg' => {
+          0 => 'OK: Endpoint is alive and kicking', 2 => 'CRIT: Endpoints not reachable!'
         }
       }]
     }
     status, output = run(checks)
     expect(status).to eql(0)
     expect(output).to include('OK: ')
-    expect($event_list).not_to include_hash_matching({"status"=>0,
-                                                  "output"=>"Service: running.service (active=1)",
-                                                  "source"=>"sbppapik8s-worker1",
-                                                  "name"=>"check_service_running.service",
-                                                  "reported_by"=>"reported_by_host",
-                                                  "occurrences"=>3,
-                                                  "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
-                                                )
+    expect($event_list).not_to include_hash_matching('status' => 0,
+                                                     'output' => 'Service: running.service (active=1)',
+                                                     'source' => 'sbppapik8s-worker1',
+                                                     'name' => 'check_service_running.service',
+                                                     'reported_by' => 'reported_by_host',
+                                                     'occurrences' => 3,
+                                                     'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
+                                                    )
   end
   it 'debugs the output of checks not matching the whitelist' do
     ENV['PROM_DEBUG'] = 'true'
     checks = {
-      "config" => {
-        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "notmatchinganything"
+      'config' => {
+        'reported_by' => 'reported_by_host', 'domain' => 'services.schubergphilis.com', 'occurences' => 3, 'whitelist' => 'notmatchinganything'
       },
-      "checks" => [{
-        "check" => "service", "cfg" => {
-          "name" => "running.service"
+      'checks' => [{
+        'check' => 'service', 'cfg' => {
+          'name' => 'running.service'
         }
       }],
-      "custom" => [{
-        "name" => "heartbeat", "query" => "up",
-        "check" => {
-          "type" => "equals", "value" => 1
+      'custom' => [{
+        'name' => 'heartbeat', 'query' => 'up',
+        'check' => {
+          'type' => 'equals', 'value' => 1
         },
-        "msg" => {
-          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        'msg' => {
+          0 => 'OK: Endpoint is alive and kicking', 2 => 'CRIT: Endpoints not reachable!'
         }
       }]
     }

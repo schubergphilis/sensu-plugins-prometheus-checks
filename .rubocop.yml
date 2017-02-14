@@ -1,0 +1,6 @@
+Metrics:
+  Enabled: false
+
+Style/GlobalVars:
+  Exclude:
+    - 'spec/*.rb'

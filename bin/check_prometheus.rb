@@ -5,7 +5,7 @@ require 'net/http'
 require 'yaml'
 require 'cgi'
 
-def query stuff
+def query(stuff)
   stuff = CGI.escape(stuff)
   host, port = (ENV['PROMETHEUS_ENDPOINT'] || 'localhost:9090').split(':')
   http = Net::HTTP.new(host, port)
@@ -16,7 +16,7 @@ def query stuff
 end
 
 def sensu_safe(string)
-  string.gsub(/[^\w\.-]+/,'_')
+  string.gsub(/[^\w\.-]+/, '_')
 end
 
 # :nocov:
@@ -27,7 +27,7 @@ def send_event(event)
 end
 # :nocov:
 
-def check result, warn, crit
+def check(result, warn, crit)
   result = result.to_f
   warn = warn.to_f
   crit = crit.to_f
@@ -42,23 +42,23 @@ def check result, warn, crit
   status
 end
 
-def percent_query_free(total,available)
+def percent_query_free(total, available)
   "100-((#{available}/#{total})*100)"
 end
 
 def predict_disk_all(cfg)
   disks = []
-  days = cfg['days'].to_i * 86400
+  days = cfg['days'].to_i * 86_400
   query("predict_linear(node_filesystem_avail{}[24h], #{days}) < 0")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['metric']['mountpoint']
     disks << "#{hostname}:#{disk}"
   end
-  if disks.length == 0
-    {'status' => 0, 'output' => "No disks are predicted to run out of space in the next #{days} days", 'name' => 'predict_disks', 'source' => cfg['source']}
+  if disks.empty?
+    { 'status' => 0, 'output' => "No disks are predicted to run out of space in the next #{days} days", 'name' => 'predict_disks', 'source' => cfg['source'] }
   else
     disks = disks.join(',')
-    {'status' => 1, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disks', 'source' => cfg['source']}
+    { 'status' => 1, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disks', 'source' => cfg['source'] }
   end
 end
 
@@ -66,17 +66,17 @@ def nice_disk_name(disk)
   if disk == '/'
     'root'
   else
-    disk.gsub(/^\//,'').gsub(/\/$/,'').gsub(/\//,'_')
+    disk.gsub(%r{^/}, '').gsub(%r{/$}, '').gsub(%r{/}, '_')
   end
 end
 
 def memory(cfg)
   results = []
-  query(percent_query_free('node_memory_MemTotal','node_memory_MemAvailable'))['data']['result'].each do |result|
+  query(percent_query_free('node_memory_MemTotal', 'node_memory_MemAvailable'))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     memory = result['value'][1].to_i
     status = check(memory, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Memory #{memory}%|memory=#{memory}", 'name' => 'check_memory', 'source' => hostname}
+    results << { 'status' => status, 'output' => "Memory #{memory}%|memory=#{memory}", 'name' => 'check_memory', 'source' => hostname }
   end
   results
 end
@@ -88,7 +88,7 @@ def disk(cfg)
     hostname = result['metric']['instance']
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{disk}%, Mountpoint: #{cfg['mount']} |disk=#{disk}", 'name' => "check_disk_#{cfg['name']}", 'source' => hostname}
+    results << { 'status' => status, 'output' => "Disk: #{disk}%, Mountpoint: #{cfg['mount']} |disk=#{disk}", 'name' => "check_disk_#{cfg['name']}", 'source' => hostname }
   end
   results
 end
@@ -97,21 +97,21 @@ def disk_all(cfg)
   results = []
   ignored = cfg['ignore_fs'] || 'tmpfs'
   ignore_fs = "fstype!~\"#{ignored}\""
-  query(percent_query_free("node_filesystem_files{#{ignore_fs}}","node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
+  query(percent_query_free("node_filesystem_files{#{ignore_fs}}", "node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
     disk_name = nice_disk_name(mountpoint)
     inodes = result['value'][1].to_i
     status = check(inodes, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{disk_name}", 'source' => hostname}
+    results << { 'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{disk_name}", 'source' => hostname }
   end
-  query(percent_query_free("node_filesystem_size{#{ignore_fs}}","node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
+  query(percent_query_free("node_filesystem_size{#{ignore_fs}}", "node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
     disk_name = nice_disk_name(mountpoint)
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{mountpoint}, Usage: #{disk}% |disk=#{disk}", 'name' => "check_disk_#{disk_name}", 'source' => hostname}
+    results << { 'status' => status, 'output' => "Disk: #{mountpoint}, Usage: #{disk}% |disk=#{disk}", 'name' => "check_disk_#{disk_name}", 'source' => hostname }
   end
   results
 end
@@ -119,19 +119,19 @@ end
 def inode(cfg)
   results = []
   disk = "mountpoint=\"#{cfg['mount']}\""
-  query(percent_query_free("node_filesystem_files{#{disk}}","node_filesystem_files_free{#{disk}}"))['data']['result'].each do |result|
+  query(percent_query_free("node_filesystem_files{#{disk}}", "node_filesystem_files_free{#{disk}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     inodes = result['value'][1].to_i
     status = check(inodes, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Disk: #{cfg['mount']}, Inodes: #{inodes}% |inodes=#{inodes}", 'name' => "check_inodes_#{cfg['name']}", 'source' => hostname}
+    results << { 'status' => status, 'output' => "Disk: #{cfg['mount']}, Inodes: #{inodes}% |inodes=#{inodes}", 'name' => "check_inodes_#{cfg['name']}", 'source' => hostname }
   end
   results
 end
 
 def service(cfg)
   defaults = {
-    'state'=> 'active',
-    'state_required'=> 1
+    'state' => 'active',
+    'state_required' => 1
   }
   cfg = defaults.merge(cfg)
 
@@ -141,7 +141,7 @@ def service(cfg)
     hostname = result['metric']['instance']
     state = result['value'][1].to_i
     status = equals(state, cfg['state_required'])
-    results << {'status' => status, 'output' => "Service: #{name} (#{cfg['state']}=#{state})", 'name' => "check_service_#{name}", 'source' => hostname}
+    results << { 'status' => status, 'output' => "Service: #{name} (#{cfg['state']}=#{state})", 'name' => "check_service_#{name}", 'source' => hostname }
   end
   results
 end
@@ -155,22 +155,21 @@ def load_per_cluster_minus_n(cfg)
 
   cpu = query("#{sum_load}/(#{total_cpus}-(#{total_cpus}/#{total_nodes})*#{minus_n})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
-  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load_minus_n", 'source' => cfg['source']}]
+  [{ 'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load_minus_n", 'source' => cfg['source'] }]
 end
-
 
 def load_per_cluster(cfg)
   cluster = cfg['cluster']
   cpu = query("sum(node_load5{job=\"#{cluster}\"})/count(node_cpu{mode=\"system\",job=\"#{cluster}\"})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
-  [{'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load", 'source' => cfg['source']}]
+  [{ 'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load", 'source' => cfg['source'] }]
 end
 
 def memory_per_cluster(cfg)
   cluster = cfg['cluster']
-  memory = query(percent_query_free("sum(node_memory_MemTotal{job=\"#{cluster}\"})","sum(node_memory_MemAvailable{job=\"#{cluster}\"})"))['data']['result'][0]['value'][1].to_i
+  memory = query(percent_query_free("sum(node_memory_MemTotal{job=\"#{cluster}\"})", "sum(node_memory_MemAvailable{job=\"#{cluster}\"})"))['data']['result'][0]['value'][1].to_i
   status = check(memory, cfg['warn'], cfg['crit'])
-  [{'status' => status, 'output' => "Cluster Memory: #{memory}%|memory=#{memory}", 'name' => "cluster_#{cfg['cluster']}_memory", 'source' => cfg['source']}]
+  [{ 'status' => status, 'output' => "Cluster Memory: #{memory}%|memory=#{memory}", 'name' => "cluster_#{cfg['cluster']}_memory", 'source' => cfg['source'] }]
 end
 
 def load_per_cpu(cfg)
@@ -179,17 +178,16 @@ def load_per_cpu(cfg)
   query('(count(node_cpu{mode="system"})by(instance))')['data']['result'].each do |result|
     cpu_counts[result['metric']['instance']] = result['value'][1]
   end
-  query("node_load5")['data']['result'].each do |result|
+  query('node_load5')['data']['result'].each do |result|
     hostname = result['metric']['instance']
     cpu = result['value'][1].to_f.round(2) / cpu_counts[hostname].to_f
     status = check(cpu, cfg['warn'], cfg['crit'])
-    results << {'status' => status, 'output' => "Load: #{cpu}|load=#{cpu}", 'name' => 'check_load', 'source' => hostname}
+    results << { 'status' => status, 'output' => "Load: #{cpu}|load=#{cpu}", 'name' => 'check_load', 'source' => hostname }
   end
   results
 end
 
-
-def equals result, value
+def equals(result, value)
   if result.to_f == value.to_f
     0
   else
@@ -201,7 +199,7 @@ def custom(check)
   results = []
   query(check['query'])['data']['result'].each do |result|
     status = send(check['check']['type'], result['value'][1], check['check']['value'])
-    results << {'status' => status, 'output' => "#{check['msg'][status]}", 'source' => result['metric']['instance'], 'name' => check['name']}
+    results << { 'status' => status, 'output' => (check['msg'][status]).to_s, 'source' => result['metric']['instance'], 'name' => check['name'] }
   end
   results
 end
@@ -209,12 +207,12 @@ end
 def map_nodenames
   node_map = {}
   query('max_over_time(node_uname_info[1d])')['data']['result'].each do |result|
-    node_map[result['metric']['instance']] = result['metric']['nodename'].split('.',2)[0]
+    node_map[result['metric']['instance']] = result['metric']['nodename'].split('.', 2)[0]
   end
   node_map
 end
 
-def build_event(event,node_map,cfg)
+def build_event(event, node_map, cfg)
   event['reported_by'] = cfg['reported_by']
   event['occurrences'] = cfg['occurences'] || 1
   node_name = node_map[event['source']] || event['source']
@@ -246,7 +244,7 @@ def run(checks)
   end
   node_map = map_nodenames
   results.flatten(1).each do |result|
-    event = build_event(result,node_map,cfg)
+    event = build_event(result, node_map, cfg)
     if event['source'] =~ /#{cfg['whitelist']}/
       if ENV['PROM_DEBUG']
         puts event
@@ -256,25 +254,23 @@ def run(checks)
       if event['status'] != 0
         failed_checks << "Source: #{event['source']}: Check: #{event['name']}: Output: #{event['output']}: Status: #{event['status']}"
       end
-    else
-      if ENV['PROM_DEBUG']
-        puts "Event dropped because source: #{result['source']} did not match whitelist: #{cfg['whitelist']} event: #{event}"
-      end
+    elsif ENV['PROM_DEBUG']
+      puts "Event dropped because source: #{result['source']} did not match whitelist: #{cfg['whitelist']} event: #{event}"
     end
   end
-  if failed_checks.length != 0
-    status = 1
-    output = failed_checks.join(' ')
-  else
+  if failed_checks.empty?
     status = 0
     output = "OK: Ran #{results.length} checks succesfully!"
+  else
+    status = 1
+    output = failed_checks.join(' ')
   end
-  return status, output
+  [status, output]
 end
 
 # :nocov:
 if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
-  checks = YAML.load_file(ARGV[0]||'config.yml')
+  checks = YAML.load_file(ARGV[0] || 'config.yml')
   status, output = run(checks)
   puts output
   exit(status)

@@ -14,21 +14,19 @@ prom_endpoint = 'localhost:19090'
 ENV['PROMETHEUS_ENDPOINT'] = prom_endpoint
 
 count = 0
-until count == 10 do
+until count == 10
   host, port = prom_endpoint.split(':')
   http = Net::HTTP.new(host, port)
   http.read_timeout = 3
   http.open_timeout = 3
-  request = Net::HTTP::Get.new("/api/v1/query?query=count(up)")
+  request = Net::HTTP::Get.new('/api/v1/query?query=count(up)')
   begin
     value = JSON.load(http.request(request).body)['data']['result'][0]['value'][1]
   rescue
     puts "Prometheus not ready yet ... #{count}"
   end
-  if value == '3'
-    break
-  end
-  count = count + 1
+  break if value == '3'
+  count += 1
   sleep(3)
 end
 
@@ -39,4 +37,4 @@ end
 
 puts 'starting rspec'
 puts `rspec -c`
-exit($?.exitstatus)
+exit($CHILD_STATUS.exitstatus)
