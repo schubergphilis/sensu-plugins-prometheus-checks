@@ -5,13 +5,13 @@ require 'net/http'
 require 'yaml'
 require 'cgi'
 
-def query(stuff)
-  stuff = CGI.escape(stuff)
+def query_prometheus(query)
+  query= CGI.escape(query)
   host, port = (ENV['PROMETHEUS_ENDPOINT'] || 'localhost:9090').split(':')
   http = Net::HTTP.new(host, port)
   http.read_timeout = 3
   http.open_timeout = 3
-  request = Net::HTTP::Get.new("/api/v1/query?query=#{stuff}")
+  request = Net::HTTP::Get.new("/api/v1/query?query=#{query}")
   JSON.load(http.request(request).body)
 end
 
@@ -49,7 +49,7 @@ end
 def predict_disk_all(cfg)
   disks = []
   days = cfg['days'].to_i * 86_400
-  query("predict_linear(node_filesystem_avail{}[24h], #{days}) < 0")['data']['result'].each do |result|
+  query_prometheus("predict_linear(node_filesystem_avail{}[24h], #{days}) < 0")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['metric']['mountpoint']
     disks << "#{hostname}:#{disk}"
@@ -72,7 +72,7 @@ end
 
 def memory(cfg)
   results = []
-  query(percent_query_free('node_memory_MemTotal', 'node_memory_MemAvailable'))['data']['result'].each do |result|
+  query_prometheus(percent_query_free('node_memory_MemTotal', 'node_memory_MemAvailable'))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     memory = result['value'][1].to_i
     status = check(memory, cfg['warn'], cfg['crit'])
@@ -84,7 +84,7 @@ end
 def disk(cfg)
   results = []
   mountpoint = "mountpoint=\"#{cfg['mount']}\""
-  query(percent_query_free("node_filesystem_size{#{mountpoint}}", "node_filesystem_avail{#{mountpoint}}"))['data']['result'].each do |result|
+  query_prometheus(percent_query_free("node_filesystem_size{#{mountpoint}}", "node_filesystem_avail{#{mountpoint}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['value'][1].to_i
     status = check(disk, cfg['warn'], cfg['crit'])
@@ -97,7 +97,7 @@ def disk_all(cfg)
   results = []
   ignored = cfg['ignore_fs'] || 'tmpfs'
   ignore_fs = "fstype!~\"#{ignored}\""
-  query(percent_query_free("node_filesystem_files{#{ignore_fs}}", "node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
+  query_prometheus(percent_query_free("node_filesystem_files{#{ignore_fs}}", "node_filesystem_files_free{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
     disk_name = nice_disk_name(mountpoint)
@@ -105,7 +105,7 @@ def disk_all(cfg)
     status = check(inodes, cfg['warn'], cfg['crit'])
     results << { 'status' => status, 'output' => "Disk: #{mountpoint}, Inode Usage: #{inodes}% |inodes=#{inodes}", 'name' => "check_inode_#{disk_name}", 'source' => hostname }
   end
-  query(percent_query_free("node_filesystem_size{#{ignore_fs}}", "node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
+  query_prometheus(percent_query_free("node_filesystem_size{#{ignore_fs}}", "node_filesystem_avail{#{ignore_fs}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     mountpoint = result['metric']['mountpoint']
     disk_name = nice_disk_name(mountpoint)
@@ -119,7 +119,7 @@ end
 def inode(cfg)
   results = []
   disk = "mountpoint=\"#{cfg['mount']}\""
-  query(percent_query_free("node_filesystem_files{#{disk}}", "node_filesystem_files_free{#{disk}}"))['data']['result'].each do |result|
+  query_prometheus(percent_query_free("node_filesystem_files{#{disk}}", "node_filesystem_files_free{#{disk}}"))['data']['result'].each do |result|
     hostname = result['metric']['instance']
     inodes = result['value'][1].to_i
     status = check(inodes, cfg['warn'], cfg['crit'])
@@ -137,7 +137,7 @@ def service(cfg)
 
   results = []
   name = cfg['name']
-  query("node_systemd_unit_state{name='#{name}',state='#{cfg['state']}'}")['data']['result'].each do |result|
+  query_prometheus("node_systemd_unit_state{name='#{name}',state='#{cfg['state']}'}")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     state = result['value'][1].to_i
     status = equals(state, cfg['state_required'])
@@ -153,21 +153,21 @@ def load_per_cluster_minus_n(cfg)
   total_cpus = "count(node_cpu{mode=\"system\",job=\"#{cluster}\"})"
   total_nodes = "count(node_load5{job=\"#{cluster}\"})"
 
-  cpu = query("#{sum_load}/(#{total_cpus}-(#{total_cpus}/#{total_nodes})*#{minus_n})")['data']['result'][0]['value'][1].to_f.round(2)
+  cpu = query_prometheus("#{sum_load}/(#{total_cpus}-(#{total_cpus}/#{total_nodes})*#{minus_n})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
   [{ 'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load_minus_n", 'source' => cfg['source'] }]
 end
 
 def load_per_cluster(cfg)
   cluster = cfg['cluster']
-  cpu = query("sum(node_load5{job=\"#{cluster}\"})/count(node_cpu{mode=\"system\",job=\"#{cluster}\"})")['data']['result'][0]['value'][1].to_f.round(2)
+  cpu = query_prometheus("sum(node_load5{job=\"#{cluster}\"})/count(node_cpu{mode=\"system\",job=\"#{cluster}\"})")['data']['result'][0]['value'][1].to_f.round(2)
   status = check(cpu, cfg['warn'], cfg['crit'])
   [{ 'status' => status, 'output' => "Cluster Load: #{cpu}|load=#{cpu}", 'name' => "cluster_#{cfg['cluster']}_load", 'source' => cfg['source'] }]
 end
 
 def memory_per_cluster(cfg)
   cluster = cfg['cluster']
-  memory = query(percent_query_free("sum(node_memory_MemTotal{job=\"#{cluster}\"})", "sum(node_memory_MemAvailable{job=\"#{cluster}\"})"))['data']['result'][0]['value'][1].to_i
+  memory = query_prometheus(percent_query_free("sum(node_memory_MemTotal{job=\"#{cluster}\"})", "sum(node_memory_MemAvailable{job=\"#{cluster}\"})"))['data']['result'][0]['value'][1].to_i
   status = check(memory, cfg['warn'], cfg['crit'])
   [{ 'status' => status, 'output' => "Cluster Memory: #{memory}%|memory=#{memory}", 'name' => "cluster_#{cfg['cluster']}_memory", 'source' => cfg['source'] }]
 end
@@ -175,10 +175,10 @@ end
 def load_per_cpu(cfg)
   results = []
   cpu_counts = {}
-  query('(count(node_cpu{mode="system"})by(instance))')['data']['result'].each do |result|
+  query_prometheus('(count(node_cpu{mode="system"})by(instance))')['data']['result'].each do |result|
     cpu_counts[result['metric']['instance']] = result['value'][1]
   end
-  query('node_load5')['data']['result'].each do |result|
+  query_prometheus('node_load5')['data']['result'].each do |result|
     hostname = result['metric']['instance']
     cpu = result['value'][1].to_f.round(2) / cpu_counts[hostname].to_f
     status = check(cpu, cfg['warn'], cfg['crit'])
@@ -197,7 +197,7 @@ end
 
 def custom(check)
   results = []
-  query(check['query'])['data']['result'].each do |result|
+  query_prometheus(check['query'])['data']['result'].each do |result|
     status = send(check['check']['type'], result['value'][1], check['check']['value'])
     results << { 'status' => status, 'output' => (check['msg'][status]).to_s, 'source' => result['metric']['instance'], 'name' => check['name'] }
   end
@@ -206,7 +206,7 @@ end
 
 def map_nodenames
   node_map = {}
-  query('max_over_time(node_uname_info[1d])')['data']['result'].each do |result|
+  query_prometheus('max_over_time(node_uname_info[1d])')['data']['result'].each do |result|
     node_map[result['metric']['instance']] = result['metric']['nodename'].split('.', 2)[0]
   end
   node_map

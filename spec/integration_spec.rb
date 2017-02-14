@@ -36,9 +36,9 @@ describe '#equals' do
   end
 end
 
-describe '#query', :vcr do
+describe '#query_prometheus', :vcr do
   it 'can do a query' do
-    expect(query('up')).to include('status' => 'success')
+    expect(query_prometheus('up')).to include('status' => 'success')
   end
 end
 
@@ -217,7 +217,7 @@ describe '#precent_query_free', :vcr do
   it 'accurately calculates the percentage free' do
     total = '100'
     available = '30'
-    result = query(percent_query_free(total, available))
+    result = query_prometheus(percent_query_free(total, available))
     expect(result['data']['result'][1]).to eq('70')
   end
 end
