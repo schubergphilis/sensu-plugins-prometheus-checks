@@ -113,6 +113,27 @@ describe '#inode', :vcr do
   end
 end
 
+describe '#predict_disk_all', :vcr do
+  it 'predicts no disks getting full ' do
+    cfg = {'days' => '30',
+           'source' => 'test123'}
+    results = predict_disk_all(cfg)
+    expect(results).to eql('output' => 'No disks are predicted to run out of space in the next 2592000 days',
+                           'name' => 'predict_disks',
+                           'source' => 'test123',
+                           'status' => 0)
+  end
+  it 'predicts a disk getting full' do
+    cfg = {'days' => '30',
+           'source' => 'test123'}
+    results = predict_disk_all(cfg)
+    expect(results).to eql('output' => 'Disks predicted to run out of space in the next 2592000 days: node-exporter1:9100:/,node-exporter1:9100:/var/lib/docker',
+                           'name' => 'predict_disks',
+                           'source' => 'test123',
+                           'status' => 1)
+  end
+end
+
 describe '#service', :vcr do
   it 'checks a service not running' do
     cfg = {'name' => 'not-running.service'}
@@ -295,6 +316,25 @@ describe '#run', :vcr do
     $event_list = []
   end
 
+  it 'fails to run a check' do
+    checks = YAML.load_file('config.yml')
+    checks['checks'][0] = ['this_will_fail']
+    checks['custom'][0] = ['this_will_fail']
+    expect { run(checks) }.to output(/Check:.*failed!/).to_stdout
+  end
+
+  it 'has a valid config with checks that can run' do
+    checks = YAML.load_file('config.yml')
+    expect { run(checks) }.to_not output(/Check:.*failed!/).to_stdout
+  end
+
+  it 'debugs output if PROM_DEBUG is set' do
+    ENV['PROM_DEBUG'] = 'true'
+    checks = YAML.load_file('config.yml')
+    expect { run(checks) }.to output(/.*Service:.*/).to_stdout
+    ENV['PROM_DEBUG'] = nil
+  end
+
   it 'does a full e2e test using the config file' do
     checks = YAML.load_file('config.yml')
     status, output = run(checks)
@@ -379,4 +419,28 @@ describe '#run', :vcr do
                                                   "address"=>"sbppapik8s-worker1.services.schubergphilis.com"}
                                                 )
   end
+  it 'debugs the output of checks not matching the whitelist' do
+    ENV['PROM_DEBUG'] = 'true'
+    checks = {
+      "config" => {
+        "reported_by" => "reported_by_host", "domain" => "services.schubergphilis.com", "occurences" => 3, "whitelist" => "notmatchinganything"
+      },
+      "checks" => [{
+        "check" => "service", "cfg" => {
+          "name" => "running.service"
+        }
+      }],
+      "custom" => [{
+        "name" => "heartbeat", "query" => "up",
+        "check" => {
+          "type" => "equals", "value" => 1
+        },
+        "msg" => {
+          0 => "OK: Endpoint is alive and kicking", 2 => "CRIT: Endpoints not reachable!"
+        }
+      }]
+    }
+    expect { run(checks) }.to output(/Event dropped because source.*/).to_stdout
+  end
+  ENV['PROM_DEBUG'] = nil
 end
