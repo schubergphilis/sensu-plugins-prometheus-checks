@@ -166,8 +166,7 @@ describe '#load_per_cluster', :vcr do
     cfg = { 'cluster' => 'prometheus',
             'warn'    => '1.0',
             'crit'    => '2.0',
-            'source'  => 'test'
-          }
+            'source'  => 'test' }
     results = load_per_cluster(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.15|load=0.15',
                                              'source' => 'test',
@@ -181,8 +180,7 @@ describe '#load_per_cluster_minus_n', :vcr do
             'minus_n' => '1',
             'warn'    => '1.0',
             'crit'    => '2.0',
-            'source'  => 'test'
-          }
+            'source'  => 'test' }
     results = load_per_cluster_minus_n(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Load: 0.22|load=0.22',
                                              'source' => 'test',
@@ -201,8 +199,7 @@ describe '#custom', :vcr do
             'msg' => {
               0 => 'OK: Endpoint is alive and kicking',
               1 => 'CRIT: Endpoints not reachable!'
-            }
-          }
+            } }
     results = custom(cfg)
     expect(results).to include_hash_matching('output' => 'OK: Endpoint is alive and kicking',
                                              'source' => 'node-exporter3:9100',
@@ -247,8 +244,7 @@ describe '#memory_per_cluster', :vcr do
     cfg = { 'cluster' => 'prometheus',
             'warn'    => '80',
             'crit'    => '90',
-            'source'  => 'test'
-          }
+            'source'  => 'test' }
     results = memory_per_cluster(cfg)
     expect(results).to include_hash_matching('output' => 'Cluster Memory: 33%|memory=33',
                                              'source' => 'test',
@@ -269,39 +265,33 @@ describe '#build_event', :vcr do
   it 'builds an event with replaced values' do
     cfg = { 'reported_by' => 'reported_by_host',
             'occurences' => 5,
-            'domain' => 'example.com'
-          }
+            'domain' => 'example.com' }
     node_map = { 'instance_name' => 'node_name' }
     event = { 'source' => 'instance_name',
               'name'          => 'check_name',
-              'extra_field'   => 'value'
-            }
+              'extra_field'   => 'value' }
     results = build_event(event, node_map, cfg)
     expect(results).to include('address' => 'node_name.example.com',
                                'source' => 'node_name',
                                'name' => 'check_name',
                                'extra_field' => 'value',
                                'occurrences' => 5,
-                               'reported_by' => 'reported_by_host'
-                              )
+                               'reported_by' => 'reported_by_host')
   end
   it 'uses default values when they cant be found' do
     cfg = { 'reported_by' => 'reported_by_host',
-            'domain' => 'example.com'
-          }
+            'domain' => 'example.com' }
     node_map = { 'not_instance_name' => 'node_name' }
     event = { 'source' => 'instance_name',
               'name'          => 'check_name',
-              'extra_field'   => 'value'
-            }
+              'extra_field'   => 'value' }
     results = build_event(event, node_map, cfg)
     expect(results).to include('address' => 'instance_name.example.com',
                                'source' => 'instance_name',
                                'name' => 'check_name',
                                'extra_field' => 'value',
                                'occurrences' => 1,
-                               'reported_by' => 'reported_by_host'
-                              )
+                               'reported_by' => 'reported_by_host')
   end
 end
 
@@ -345,8 +335,7 @@ describe '#run', :vcr do
                                                  'name' => 'heartbeat',
                                                  'reported_by' => 'reported_by_host',
                                                  'occurrences' => 3,
-                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
-                                                )
+                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com')
   end
   it 'returns a warning if a check fails' do
     checks = YAML.load_file('config.yml')
@@ -383,8 +372,7 @@ describe '#run', :vcr do
                                                  'name' => 'check_service_running.service',
                                                  'reported_by' => 'reported_by_host',
                                                  'occurrences' => 3,
-                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
-                                                )
+                                                 'address' => 'sbppapik8s-worker1.services.schubergphilis.com')
   end
   it 'drops a check if it does not match the whitelist' do
     checks = {
@@ -415,8 +403,7 @@ describe '#run', :vcr do
                                                      'name' => 'check_service_running.service',
                                                      'reported_by' => 'reported_by_host',
                                                      'occurrences' => 3,
-                                                     'address' => 'sbppapik8s-worker1.services.schubergphilis.com'
-                                                    )
+                                                     'address' => 'sbppapik8s-worker1.services.schubergphilis.com')
   end
   it 'debugs the output of checks not matching the whitelist' do
     ENV['PROM_DEBUG'] = 'true'
