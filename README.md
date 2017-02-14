@@ -1,5 +1,8 @@
 # Sensu Kubernetes Prometheus Plugin
 
+[![build status](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/badges/master/build.svg)](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/commits/master)
+[![coverage report](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/badges/master/coverage.svg)](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/commits/master)
+
 ## Description
 Sensu plugin designed to query prometheus data output from node-exporter
 
