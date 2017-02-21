@@ -273,10 +273,14 @@ checks:
   <tr>
     <td>predict_disk_all</td>
     <td>
+      range_vector: Prometheus range vector used for sample size of prediction
+      filter: prometheus filter to include/exclude disks<br>
       days: prediction days
       source: sensu name
    </td>
     <td>
+      range_vector: 24h <br>
+      filter: {mountpoint="/"}<br>
       days: 14
       source: sbppapik8s
    </td>

@@ -118,7 +118,7 @@ describe '#predict_disk_all', :vcr do
     cfg = { 'days' => '30',
             'source' => 'test123' }
     results = predict_disk_all(cfg)
-    expect(results).to eql('output' => 'No disks are predicted to run out of space in the next 2592000 days',
+    expect(results).to eql('output' => 'No disks are predicted to run out of space in the next 30 days',
                            'name' => 'predict_disks',
                            'source' => 'test123',
                            'status' => 0)
@@ -127,10 +127,31 @@ describe '#predict_disk_all', :vcr do
     cfg = { 'days' => '30',
             'source' => 'test123' }
     results = predict_disk_all(cfg)
-    expect(results).to eql('output' => 'Disks predicted to run out of space in the next 2592000 days: node-exporter1:9100:/,node-exporter1:9100:/var/lib/docker',
+    expect(results).to eql('output' => 'Disks predicted to run out of space in the next 30 days: node-exporter1:9100:/,node-exporter1:9100:/var/lib/docker',
                            'name' => 'predict_disks',
                            'source' => 'test123',
                            'status' => 1)
+  end
+  it 'predicts a single disk getting full' do
+    cfg = { 'days' => '30',
+            'filter' => '{mountpoint="/var/lib/docker"}',
+            'source' => 'test123' }
+    results = predict_disk_all(cfg)
+    expect(results).to eql('output' => 'Disks predicted to run out of space in the next 30 days: node-exporter1:9100:/var/lib/docker',
+                           'name' => 'predict_disks',
+                           'source' => 'test123',
+                           'status' => 1)
+  end
+  it 'exits with a critical if required' do
+    cfg = { 'days' => '30',
+            'filter' => '{mountpoint="/var/lib/docker"}',
+            'exit_code' => '2',
+            'source' => 'test123' }
+    results = predict_disk_all(cfg)
+    expect(results).to eql('output' => 'Disks predicted to run out of space in the next 30 days: node-exporter1:9100:/var/lib/docker',
+                           'name' => 'predict_disks',
+                           'source' => 'test123',
+                           'status' => 2)
   end
 end
 

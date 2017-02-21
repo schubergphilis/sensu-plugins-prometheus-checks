@@ -48,8 +48,13 @@ end
 
 def predict_disk_all(cfg)
   disks = []
-  days = cfg['days'].to_i * 86_400
-  query_prometheus("predict_linear(node_filesystem_avail{}[24h], #{days}) < 0")['data']['result'].each do |result|
+  days = cfg['days'].to_i
+  days_in_seconds = days.to_i * 86_400
+
+  range_vector = cfg['sample_size'] || '24h'
+  filter = cfg['filter'] || {}
+  exit_code = cfg['exit_code'] || 1
+  query_prometheus("predict_linear(node_filesystem_avail#{filter}[#{range_vector}], #{days_in_seconds}) < 0")['data']['result'].each do |result|
     hostname = result['metric']['instance']
     disk = result['metric']['mountpoint']
     disks << "#{hostname}:#{disk}"
@@ -58,7 +63,7 @@ def predict_disk_all(cfg)
     { 'status' => 0, 'output' => "No disks are predicted to run out of space in the next #{days} days", 'name' => 'predict_disks', 'source' => cfg['source'] }
   else
     disks = disks.join(',')
-    { 'status' => 1, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disks', 'source' => cfg['source'] }
+    { 'status' => exit_code.to_i, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disks', 'source' => cfg['source'] }
   end
 end
 
