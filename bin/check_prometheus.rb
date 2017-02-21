@@ -21,7 +21,7 @@ end
 
 # :nocov:
 def send_event(event)
-  s = TCPSocket.open('localhost', 3030)
+  s = TCPSocket.open(ENV['SENSU_SOCKET_ADDRESS'] || 'localhost', ENV['SENSU_SOCKET_PORT'].to_i || 3030)
   s.puts JSON.generate(event)
   s.close
 end

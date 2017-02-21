@@ -30,6 +30,42 @@ To run the dockerized version (that gitlab-ci uses)
 bash test.sh
 ```
 
+### Environment variables
+
+<table>
+ <tr>
+   <th>Name</th>
+   <th>Example</th>
+   <th>Default</th>
+   <th>Description</th>
+ </tr>
+ <tr>
+   <td>PROM_DEBUG</td>
+   <td>true</td>
+   <td>false</td>
+   <td>Debug output instead of sending checks to sensu</td>
+ </tr>
+ <tr>
+   <td>PROMETHEUS_ENDPOINT</td>
+   <td>hostname:9090</td>
+   <td>localhost:9090</td>
+   <td>Connection string in the format address:port</td>
+ </tr>
+ <tr>
+   <td>SENSU_SOCKET_ADDRESS</td>
+   <td>hostname</td>
+   <td>localhost</td>
+   <td>Address used to connect to the sensu socket</td>
+ </tr>
+ <tr>
+   <td>SENSU_SOCKET_PORT</td>
+   <td>1234</td>
+   <td>3030</td>
+   <td>Port used to connect to the sensu socket</td>
+ </tr>
+</table>
+
+
 ### Config.yml
 Check configuration is defined in the `config.yml` file under the key `checks`
 
