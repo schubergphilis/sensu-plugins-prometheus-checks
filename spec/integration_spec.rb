@@ -36,12 +36,6 @@ describe '#equals' do
   end
 end
 
-describe '#query_prometheus', :vcr do
-  it 'can do a query' do
-    expect(query_prometheus('up')).to include('status' => 'success')
-  end
-end
-
 describe '#sensu_safe' do
   it 'returns a safe hostname' do
     expect(sensu_safe('test-hostname:9100')).to eql('test-hostname_9100')
@@ -239,7 +233,7 @@ describe '#precent_query_free', :vcr do
     total = '100'
     available = '30'
     result = query_prometheus(percent_query_free(total, available))
-    expect(result['data']['result'][1]).to eq('70')
+    expect(result[1]).to eq('70')
   end
 end
 
