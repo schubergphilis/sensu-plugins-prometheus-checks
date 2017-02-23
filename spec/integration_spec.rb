@@ -321,26 +321,26 @@ describe '#run', :vcr do
   end
 
   it 'fails to run a check' do
-    checks = YAML.load_file('config.yml')
+    checks = YAML.load_file('./spec/config/prometheus_checks.yml')
     checks['checks'][0] = ['this_will_fail']
     checks['custom'][0] = ['this_will_fail']
     expect { run(checks) }.to output(/Check:.*failed!/).to_stdout
   end
 
   it 'has a valid config with checks that can run' do
-    checks = YAML.load_file('config.yml')
+    checks = YAML.load_file('./spec/config/prometheus_checks.yml')
     expect { run(checks) }.to_not output(/Check:.*failed!/).to_stdout
   end
 
   it 'debugs output if PROM_DEBUG is set' do
     ENV['PROM_DEBUG'] = 'true'
-    checks = YAML.load_file('config.yml')
+    checks = YAML.load_file('./spec/config/prometheus_checks.yml')
     expect { run(checks) }.to output(/.*Service:.*/).to_stdout
     ENV['PROM_DEBUG'] = nil
   end
 
   it 'does a full e2e test using the config file' do
-    checks = YAML.load_file('config.yml')
+    checks = YAML.load_file('./spec/config/prometheus_checks.yml')
     status, output = run(checks)
     expect(status).to eql 1
     expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')
@@ -353,7 +353,7 @@ describe '#run', :vcr do
                                                  'address' => 'sbppapik8s-worker1.services.schubergphilis.com')
   end
   it 'returns a warning if a check fails' do
-    checks = YAML.load_file('config.yml')
+    checks = YAML.load_file('./spec/config/prometheus_checks.yml')
     status, output = run(checks)
     expect(status).to eql 1
     expect(output).to include('Source: sbppapik8s-worker2: Check: check_service_not-running.service: Output: Service: not-running.service (active=0): Status: 2')

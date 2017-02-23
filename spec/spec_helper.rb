@@ -1,3 +1,7 @@
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require "sensu/plugins/prometheus/checks"
+
 require 'simplecov'
 require 'vcr'
 
@@ -10,5 +14,6 @@ end
 
 SimpleCov.minimum_coverage 100
 SimpleCov.start do
+  coverage_dir 'spec/reports/coverage'
   add_filter '/spec/'
 end
