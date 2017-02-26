@@ -67,10 +67,9 @@ bash test.sh
 
 
 ### Config.yml
-Check configuration is defined in the `config.yml` file under the key `checks`
+Check configuration is defined in the `config.yml` file under the key `checks`, and checks based on custom Prometheus queries are under `custom`. Example:
 
-Example
-```
+``` yaml
 config:
   reported_by: sbppapik8s
   occurences: 3
@@ -86,6 +85,15 @@ checks:
       warn: 1.0
       crit: 2.0
       source: sbppapik8s
+custom:
+  - name: heartbeat
+    query: up
+    check:
+      type: equals
+      value: 1
+    msg:
+      0: 'OK: Endpoint is alive and kicking'
+      2: 'CRIT: Endpoints not reachable!'
 ```
 
 ## Checks
@@ -132,6 +140,46 @@ checks:
     <td>Predicts if any of the disks in prometheus will be full in x days</td>
   </tr>
  </table>
+ 
+## Custom
+
+ <table>
+  <tr>
+    <th>Name</th>
+    <th>Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>heartbeat</td>
+    <td>Custom check's name</td>
+  </tr>
+  <tr>
+    <td>query</td>
+    <td>up</td>
+    <td>Prometheus query</td>
+  </tr>
+  <tr>
+    <td>check.type</td>
+    <td>equals</td>
+    <td>Type of evaluation applied against value. Avilable: `equals`</td>
+  </tr>
+  <tr>
+    <td>check.value</td>
+    <td>1</td>
+    <td>Value to be compared against query results, using `check.type` evaluation</td>
+  </tr>
+  <tr>
+    <td>msg.0</td>
+    <td>OK: heartbeat is up</td>
+    <td>Message to be used when `value` evaluation is sucessful.</td>
+  </tr>
+  <tr>
+    <td>msg.2</td>
+    <td>CRITICAL: heartbeat is down</td>
+    <td>Message to be used when not sucessful.</td>
+  </tr>
+  </table>
 
 ## Global Configuration Options
  <table>
