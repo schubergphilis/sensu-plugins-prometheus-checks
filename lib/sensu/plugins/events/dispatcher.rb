@@ -25,6 +25,7 @@ module Sensu
             return
           end
 
+          # :nocov:
           begin
             s = TCPSocket.open(@sensu_address, @sensu_port)
             s.puts(JSON.generate(event))
@@ -33,6 +34,7 @@ module Sensu
             log.error("Sensu is refusing connections! Error: '#{e}'")
             raise("Sensu is not avilable at '#{@sensu_address}:#{@sensu_port}'")
           end
+          # :nocov:
         end
 
         private
