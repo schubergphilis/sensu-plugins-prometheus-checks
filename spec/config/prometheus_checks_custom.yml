@@ -1,0 +1,15 @@
+#---
+config:
+  reported_by: reported_by_host
+  domain: services.schubergphilis.com
+  occurences: 3
+  whitelist: sbppapik8s
+custom:
+  - name: heartbeat
+    query: up
+    check:
+      type: equals
+      value: 1
+    msg:
+      0: 'OK: Endpoint is alive and kicking'
+      2: 'CRIT: Endpoints not reachable!'

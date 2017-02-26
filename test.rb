@@ -37,4 +37,5 @@ end
 
 puts 'starting rspec'
 puts `rspec -c`
-exit($CHILD_STATUS.exitstatus)
+exit_code = `echo $?`
+exit(exit_code.to_i)
