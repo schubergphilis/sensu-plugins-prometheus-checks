@@ -1,6 +1,15 @@
 Metrics:
   Enabled: false
+AllCops:
+  Exclude:
+    - 'test.rb'
+    - '*.gemspec'
+    - 'Gemfile'
+    - 'Rakefile'
 
 Style/GlobalVars:
   Exclude:
     - 'spec/*.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
