@@ -10,7 +10,7 @@ services:
     image: quay.io/prometheus/prometheus:v1.0.1
     container_name: prometheus
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - ./spec/docker/prometheus/:/etc/prometheus/
     command:
       - '-config.file=/etc/prometheus/prometheus.yml'
       - '-storage.local.path=/prometheus'
@@ -25,7 +25,7 @@ services:
     ports:
       - 19100:9100
     volumes:
-      - ./node-exporter/node1/:/etc/node-exporter/
+      - ./spec/docker/node-exporter/node1/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
@@ -36,7 +36,7 @@ services:
     ports:
       - 19101:9100
     volumes:
-      - ./node-exporter/node2/:/etc/node-exporter/
+      - ./spec/docker/node-exporter/node2/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
@@ -47,7 +47,7 @@ services:
     ports:
       - 19102:9100
     volumes:
-      - ./node-exporter/node3/:/etc/node-exporter/
+      - ./spec/docker/node-exporter/node3/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
