@@ -59,6 +59,7 @@ module Sensu
           prepare_metrics('inode', @client.query(query))
         end
 
+        # Compose query to predict disk usage on the last day.
         def predict_disk_all(cfg)
           days = cfg['days'].to_i
           days_in_seconds = days.to_i * 86_400
@@ -84,6 +85,7 @@ module Sensu
           prepare_metrics('service', @client.query(query))
         end
 
+        # Query the percentage free memory.
         def memory(_)
           query = @client.percent_query_free(
             'node_memory_MemTotal',
@@ -92,6 +94,7 @@ module Sensu
           prepare_metrics('memory', @client.query(query))
         end
 
+        # Percentage free memory cluster wide.
         def memory_per_cluster(cfg)
           cluster = cfg['cluster']
           query = @client.percent_query_free(
@@ -109,6 +112,7 @@ module Sensu
           metrics
         end
 
+        # Calculates the load of an entire cluster.
         def load_per_cluster(cfg)
           cluster = cfg['cluster']
           query = format(
@@ -150,6 +154,7 @@ module Sensu
           [{ 'source' => source, 'value' => value }]
         end
 
+        # Current load per CPU.
         def load_per_cpu(_)
           cpu_per_source = {}
           @client.query(
@@ -177,6 +182,7 @@ module Sensu
 
         private
 
+        # Prepare metrics with integer valutes, the most common case in the class.
         def prepare_metrics(metric_name, results)
           metrics = []
           results.each do |result|

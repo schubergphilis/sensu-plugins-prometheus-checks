@@ -10,6 +10,7 @@ module Sensu
             end
           end
 
+          # Wrap around `binding` method.
           def namespace_binding
             binding
           end

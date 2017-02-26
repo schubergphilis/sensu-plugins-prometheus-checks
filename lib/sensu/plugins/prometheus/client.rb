@@ -41,6 +41,7 @@ module Sensu
           payload['data']['result']
         end
 
+        # String placeholders to calculate percentage free.
         def percent_query_free(total, available)
           "100-((#{available}/#{total})*100)"
         end
