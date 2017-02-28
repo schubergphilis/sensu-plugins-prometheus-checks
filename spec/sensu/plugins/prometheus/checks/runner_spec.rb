@@ -13,6 +13,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
     runner.run
     expect(runner.status).to be 1
+    puts "Debug -> output '#{runner.output}'"
     expect(runner.output).to include(
       'Source: sbppapik8s-worker3, ' \
       'Check: check_service_xenserver-pv-version.service, ' \
@@ -21,7 +22,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker2.services.schubergphilis.com',
       'name' => 'check_memory',
-      'occurences' => 3,
+      'occurrences' => 3,
       'output' => 'Memory 29% |memory=29',
       'reported_by' => 'reported_by_host',
       'status' => 0,
@@ -38,7 +39,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
       'name' => 'custom_heartbeat',
-      'occurences' => 3,
+      'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
       'status' => 0,

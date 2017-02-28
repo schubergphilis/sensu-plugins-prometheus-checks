@@ -220,7 +220,7 @@ module Sensu
             @events << {
               'address' => sensu_safe(address),
               'name' => sensu_safe(name),
-              'occurences' => @config['config']['occurences'] || 1,
+              'occurrences' => @config['config']['occurrences'] || 1,
               'output' => output,
               'reported_by' => @config['config']['reported_by'],
               'status' => status,

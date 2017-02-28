@@ -72,7 +72,7 @@ Check configuration is defined in the `config.yml` file under the key `checks`, 
 ``` yaml
 config:
   reported_by: sbppapik8s
-  occurences: 3
+  occurrences: 3
   domain: example.com
   whitelist: sbppapik8s.*
 checks:
@@ -194,7 +194,7 @@ custom:
     <td>hostname that shows up in sensu reported_by field</td>
   </tr>
   <tr>
-    <td>occurences</td>
+    <td>occurrences</td>
     <td>3</td>
     <td>amount of failures before sensu will send an alert</td>
   </tr>

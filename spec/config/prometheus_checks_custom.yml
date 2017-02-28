@@ -2,7 +2,7 @@
 config:
   reported_by: reported_by_host
   domain: services.schubergphilis.com
-  occurences: 3
+  occurrences: 3
   whitelist: sbppapik8s
 custom:
   - name: heartbeat
