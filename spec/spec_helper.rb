@@ -20,3 +20,7 @@ VCR.configure do |c|
   c.configure_rspec_metadata!
   c.default_cassette_options = { record: :new_episodes }
 end
+
+# setting up environment variables that trigger VCR calls
+ENV['PROM_DEBUG'] = 'true'
+ENV['PROMETHEUS_ENDPOINT'] = '127.0.0.1:19090'

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-ENV['PROM_DEBUG'] = 'true'
-
 describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
   it 'instantiates a Run class' do
     runner = Sensu::Plugins::Prometheus::Checks::Runner.new(
