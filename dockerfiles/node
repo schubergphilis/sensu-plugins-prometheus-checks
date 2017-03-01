@@ -1,2 +1,0 @@
-FROM prom/node-exporter:0.12.0
-ADD . /etc/node-exporter

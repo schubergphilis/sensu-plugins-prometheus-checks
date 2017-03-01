@@ -1,5 +1,8 @@
 # Sensu Kubernetes Prometheus Plugin
 
+[![build status](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/badges/master/build.svg)](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/commits/master)
+[![coverage report](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/badges/master/coverage.svg)](https://sbp.gitlab.schubergphilis.com/MCP/sensu-plugins-k8s/commits/master)
+
 ## Description
 Sensu plugin designed to query prometheus data output from node-exporter
 
@@ -27,14 +30,49 @@ To run the dockerized version (that gitlab-ci uses)
 bash test.sh
 ```
 
-### Config.yml
-Check configuration is defined in the `config.yml` file under the key `checks`
+### Environment variables
 
-Example
-```
+<table>
+ <tr>
+   <th>Name</th>
+   <th>Example</th>
+   <th>Default</th>
+   <th>Description</th>
+ </tr>
+ <tr>
+   <td>PROM_DEBUG</td>
+   <td>true</td>
+   <td>false</td>
+   <td>Debug output instead of sending checks to sensu</td>
+ </tr>
+ <tr>
+   <td>PROMETHEUS_ENDPOINT</td>
+   <td>hostname:9090</td>
+   <td>localhost:9090</td>
+   <td>Connection string in the format address:port</td>
+ </tr>
+ <tr>
+   <td>SENSU_SOCKET_ADDRESS</td>
+   <td>hostname</td>
+   <td>localhost</td>
+   <td>Address used to connect to the sensu socket</td>
+ </tr>
+ <tr>
+   <td>SENSU_SOCKET_PORT</td>
+   <td>1234</td>
+   <td>3030</td>
+   <td>Port used to connect to the sensu socket</td>
+ </tr>
+</table>
+
+
+### Config.yml
+Check configuration is defined in the `config.yml` file under the key `checks`, and checks based on custom Prometheus queries are under `custom`. Example:
+
+``` yaml
 config:
   reported_by: sbppapik8s
-  occurences: 3
+  occurrences: 3
   domain: example.com
   whitelist: sbppapik8s.*
 checks:
@@ -47,6 +85,15 @@ checks:
       warn: 1.0
       crit: 2.0
       source: sbppapik8s
+custom:
+  - name: heartbeat
+    query: up
+    check:
+      type: equals
+      value: 1
+    msg:
+      0: 'OK: Endpoint is alive and kicking'
+      2: 'CRIT: Endpoints not reachable!'
 ```
 
 ## Checks
@@ -93,6 +140,46 @@ checks:
     <td>Predicts if any of the disks in prometheus will be full in x days</td>
   </tr>
  </table>
+ 
+## Custom
+
+ <table>
+  <tr>
+    <th>Name</th>
+    <th>Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>heartbeat</td>
+    <td>Custom check's name</td>
+  </tr>
+  <tr>
+    <td>query</td>
+    <td>up</td>
+    <td>Prometheus query</td>
+  </tr>
+  <tr>
+    <td>check.type</td>
+    <td>equals</td>
+    <td>Type of evaluation applied against value. Avilable: `equals`</td>
+  </tr>
+  <tr>
+    <td>check.value</td>
+    <td>1</td>
+    <td>Value to be compared against query results, using `check.type` evaluation</td>
+  </tr>
+  <tr>
+    <td>msg.0</td>
+    <td>OK: heartbeat is up</td>
+    <td>Message to be used when `value` evaluation is sucessful.</td>
+  </tr>
+  <tr>
+    <td>msg.2</td>
+    <td>CRITICAL: heartbeat is down</td>
+    <td>Message to be used when not sucessful.</td>
+  </tr>
+  </table>
 
 ## Global Configuration Options
  <table>
@@ -107,7 +194,7 @@ checks:
     <td>hostname that shows up in sensu reported_by field</td>
   </tr>
   <tr>
-    <td>occurences</td>
+    <td>occurrences</td>
     <td>3</td>
     <td>amount of failures before sensu will send an alert</td>
   </tr>
@@ -234,10 +321,14 @@ checks:
   <tr>
     <td>predict_disk_all</td>
     <td>
+      range_vector: Prometheus range vector used for sample size of prediction
+      filter: prometheus filter to include/exclude disks<br>
       days: prediction days
       source: sensu name
    </td>
     <td>
+      range_vector: 24h <br>
+      filter: {mountpoint="/"}<br>
       days: 14
       source: sbppapik8s
    </td>

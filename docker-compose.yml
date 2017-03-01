@@ -7,10 +7,10 @@ networks:
 
 services:
   promtheues:
-    build:
-      dockerfile: $PWD/dockerfiles/prometheus
-      context: ./prometheus/
+    image: quay.io/prometheus/prometheus:v1.0.1
     container_name: prometheus
+    volumes:
+      - ./spec/docker/prometheus/:/etc/prometheus/
     command:
       - '-config.file=/etc/prometheus/prometheus.yml'
       - '-storage.local.path=/prometheus'
@@ -19,35 +19,35 @@ services:
     ports:
       - 19090:9090
   node-exporter1:
-    build:
-      dockerfile: $PWD/dockerfiles/node
-      context: ./node-exporter/node1
+    image: prom/node-exporter:0.12.0
     expose:
       - 19100
     ports:
       - 19100:9100
+    volumes:
+      - ./spec/docker/node-exporter/node1/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
   node-exporter2:
-    build:
-      dockerfile: $PWD/dockerfiles/node
-      context: ./node-exporter/node2
+    image: prom/node-exporter:0.12.0
     expose:
       - 19101
     ports:
       - 19101:9100
+    volumes:
+      - ./spec/docker/node-exporter/node2/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"
   node-exporter3:
-    build:
-      dockerfile: $PWD/dockerfiles/node
-      context: ./node-exporter/node3
+    image: prom/node-exporter:0.12.0
     expose:
       - 19102
     ports:
       - 19102:9100
+    volumes:
+      - ./spec/docker/node-exporter/node3/:/etc/node-exporter/
     command:
       - "-collectors.enabled=textfile"
       - "-collector.textfile.directory=/etc/node-exporter/"

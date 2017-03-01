@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:19090/api/v1/query?query=up
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, Origin
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Date
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 Mar 2017 09:23:32 GMT
+      Content-Length:
+      - '392'
+    body:
+      encoding: UTF-8
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"up","instance":"node-exporter1:9100","job":"prometheus"},"value":[1488360212.156,"1"]},{"metric":{"__name__":"up","instance":"node-exporter3:9100","job":"prometheus"},"value":[1488360212.156,"1"]},{"metric":{"__name__":"up","instance":"node-exporter2:9100","job":"prometheus"},"value":[1488360212.156,"1"]}]}}'
+    http_version: 
+  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+recorded_with: VCR 3.0.3
