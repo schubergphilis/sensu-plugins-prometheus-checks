@@ -2,118 +2,6 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:19090/api/v1/query?query=sum(node_load5%7Bjob=%22%22%7D)/(count(node_cpu%7Bmode=%22system%22,job=%22%22%7D)-(count(node_cpu%7Bmode=%22system%22,job=%22%22%7D)/count(node_load5%7Bjob=%22%22%7D))*)
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 400
-      message: Bad Request
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 18:28:08 GMT
-      Content-Length:
-      - '102'
-    body:
-      encoding: UTF-8
-      string: '{"status":"error","errorType":"bad_data","error":"parse error at char
-        130: no valid expression found"}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 18:28:08 GMT
-- request:
-    method: get
-    uri: http://localhost:19090/api/v1/query?query=(count(node_cpu%7Bmode=%22system%22%7D)by(instance))
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 18:28:45 GMT
-      Content-Length:
-      - '284'
-    body:
-      encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter1:9100"},"value":[1487874525.21,"2"]},{"metric":{"instance":"node-exporter3:9100"},"value":[1487874525.21,"2"]},{"metric":{"instance":"node-exporter2:9100"},"value":[1487874525.21,"2"]}]}}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 18:28:45 GMT
-- request:
-    method: get
-    uri: http://localhost:19090/api/v1/query?query=node_load5
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 18:28:45 GMT
-      Content-Length:
-      - '422'
-    body:
-      encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_load5","instance":"node-exporter2:9100","job":"prometheus"},"value":[1487874525.216,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter1:9100","job":"prometheus"},"value":[1487874525.216,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter3:9100","job":"prometheus"},"value":[1487874525.216,"0.3"]}]}}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 18:28:45 GMT
-- request:
-    method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=(count(node_cpu%7Bmode=%22system%22%7D)by(instance))
     body:
       encoding: US-ASCII
@@ -141,14 +29,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 26 Feb 2017 12:05:44 GMT
+      - Wed, 01 Mar 2017 09:23:32 GMT
       Content-Length:
-      - '287'
+      - '284'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter1:9100"},"value":[1488110744.675,"2"]},{"metric":{"instance":"node-exporter3:9100"},"value":[1488110744.675,"2"]},{"metric":{"instance":"node-exporter2:9100"},"value":[1488110744.675,"2"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter3:9100"},"value":[1488360212.33,"2"]},{"metric":{"instance":"node-exporter2:9100"},"value":[1488360212.33,"2"]},{"metric":{"instance":"node-exporter1:9100"},"value":[1488360212.33,"2"]}]}}'
     http_version: 
-  recorded_at: Sun, 26 Feb 2017 12:05:44 GMT
+  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_load5
@@ -178,12 +66,12 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 26 Feb 2017 12:05:44 GMT
+      - Wed, 01 Mar 2017 09:23:32 GMT
       Content-Length:
       - '422'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_load5","instance":"node-exporter3:9100","job":"prometheus"},"value":[1488110744.684,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter2:9100","job":"prometheus"},"value":[1488110744.684,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter1:9100","job":"prometheus"},"value":[1488110744.684,"0.3"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_load5","instance":"node-exporter2:9100","job":"prometheus"},"value":[1488360212.341,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter1:9100","job":"prometheus"},"value":[1488360212.341,"0.3"]},{"metric":{"__name__":"node_load5","instance":"node-exporter3:9100","job":"prometheus"},"value":[1488360212.341,"0.3"]}]}}'
     http_version: 
-  recorded_at: Sun, 26 Feb 2017 12:05:44 GMT
+  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
 recorded_with: VCR 3.0.3

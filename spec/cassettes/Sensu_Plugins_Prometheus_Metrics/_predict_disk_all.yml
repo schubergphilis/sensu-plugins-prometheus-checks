@@ -2,117 +2,6 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7B%7D%5B24h%5D,%200)%20%3C%200
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 14:03:00 GMT
-      Content-Length:
-      - '63'
-    body:
-      encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 14:03:00 GMT
-- request:
-    method: get
-    uri: http://localhost:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7B%7D%5B24h%5D,%202592000)%20%3C%200
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 16:50:48 GMT
-      Content-Length:
-      - '63'
-    body:
-      encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 16:50:48 GMT
-- request:
-    method: get
-    uri: http://localhost:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7Bmountpoint=%22/var/lib/docker%22%7D%5B24h%5D,%202592000)%20%3C%200
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, Origin
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - Date
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 23 Feb 2017 16:52:04 GMT
-      Content-Length:
-      - '63'
-    body:
-      encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
-    http_version: 
-  recorded_at: Thu, 23 Feb 2017 16:52:04 GMT
-- request:
-    method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7Bmountpoint=%22/var/lib/docker%22%7D%5B24h%5D,%202592000)%20%3C%200
     body:
       encoding: US-ASCII
@@ -140,12 +29,12 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 26 Feb 2017 12:05:44 GMT
+      - Wed, 01 Mar 2017 09:23:32 GMT
       Content-Length:
       - '63'
     body:
       encoding: UTF-8
       string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
     http_version: 
-  recorded_at: Sun, 26 Feb 2017 12:05:44 GMT
+  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
 recorded_with: VCR 3.0.3
