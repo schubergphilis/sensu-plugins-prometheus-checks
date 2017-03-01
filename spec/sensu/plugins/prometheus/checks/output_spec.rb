@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sensu::Plugins::Prometheus::Checks::Output do
+describe Sensu::Plugins::Prometheus::Checks::Output, :vcr do
   let(:prometheus) { Sensu::Plugins::Prometheus::Client.new }
   let(:metrics) { Sensu::Plugins::Prometheus::Metrics.new(prometheus) }
   let(:output) { Sensu::Plugins::Prometheus::Checks::Output.new }

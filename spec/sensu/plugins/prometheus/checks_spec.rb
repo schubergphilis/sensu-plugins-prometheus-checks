@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sensu::Plugins::Prometheus::Checks do
+describe Sensu::Plugins::Prometheus::Checks, :vcr do
   include Sensu::Plugins::Prometheus::Checks
 
   it 'has a version number' do
