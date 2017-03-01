@@ -10,7 +10,7 @@ require 'net/http'
 `docker-compose create`
 `docker-compose start`
 
-prom_endpoint = 'localhost:19090'
+prom_endpoint = '127.0.0.1:19090'
 ENV['PROMETHEUS_ENDPOINT'] = prom_endpoint
 
 count = 0
