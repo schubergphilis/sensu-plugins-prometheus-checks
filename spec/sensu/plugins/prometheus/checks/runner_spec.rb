@@ -12,13 +12,18 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     config = YAML.load_file('spec/config/prometheus_checks.yml')
     runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
     runner.run
+
     expect(runner.status).to be 1
-    puts "Debug -> output '#{runner.output}'"
+
+    # final output message should concatenate more checks
+    expect(runner.output).to include(' | ')
+
     expect(runner.output).to include(
       'Source: sbppapik8s-worker3, ' \
       'Check: check_service_xenserver-pv-version.service, ' \
-      'Output: Service: xenserver-pv-version.service (active=0), Status: 2 |'
+      'Output: Service: xenserver-pv-version.service (active=0), Status: 2'
     )
+
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker2.services.schubergphilis.com',
       'name' => 'check_memory',
