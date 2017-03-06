@@ -115,19 +115,38 @@ module Sensu
             @config['custom'].each do |custom|
               # invoke "custom" method in metrics object
               collect_metrics('custom', custom).each do |metric|
-                # calling local method to determine metric status
-                status = send(
-                  custom['check']['type'],
-                  metric['value'],
-                  custom['check']['value']
-                )
+                value = metric['value']
+                name = custom['name']
+
+                if custom.key?('check')
+                  # calling local method to determine metric status
+                  status = send(
+                    custom['check']['type'],
+                    value,
+                    custom['check']['value']
+                  )
+                elsif custom.key?('cfg')
+                  # normal threshold evaluation
+                  status = evaluate(
+                    value,
+                    custom['cfg']['warn'],
+                    custom['cfg']['crit']
+                  )
+                else
+                  log.warn(
+                    "Custom check does not have 'check' or 'cfg', can't be evaluated"
+                  )
+                  status = 3
+                end
+
+                log.debug("Custom Check: name='#{name}', value='#{value}'")
 
                 # making sure the custom check has the status defined
-                raise "Can't find 'output' message in custom check: '#{custom['name']}" \
+                raise "Can't find 'output' message in custom check: '#{name}" \
                   if !custom.key?('msg') || !custom['msg'].key?(status)
 
                 append_event(
-                  "custom_#{custom['name']}",
+                  "custom_#{name}",
                   custom['msg'][status].to_s,
                   status,
                   metric['source']
@@ -145,7 +164,8 @@ module Sensu
               # skipping events that are not whitelisted
               if @config.key?('whitelist') && event['source'] !~ /#{@config['whitelist']}/
                 log.debug(
-                  "Skipping event! Source '#{event['source']}' does not match /#{@config['whitelist']}/"
+                  "Skipping event! Source '#{event['source']}' does not " \
+                    "match /#{@config['whitelist']}/"
                 )
                 next
               end
@@ -191,7 +211,7 @@ module Sensu
               log.info("[node_exporter] instance: '#{source}', nodename: '#{nodename}'")
               map[source] = nodename
             end
-            raise 'Unable to query the node_exporter intances from Prometheus' \
+            log.warn('Unable to query the node_exporter intances from Prometheus') \
               if map.empty?
             map
           end
