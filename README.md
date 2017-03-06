@@ -170,6 +170,16 @@ custom:
     <td>Value to be compared against query results, using `check.type` evaluation</td>
   </tr>
   <tr>
+    <td>cfg.warn</td>
+    <td>33,00</td>
+    <td>Warning threshold level</td>
+  </tr>
+  <tr>
+    <td>cfg.crit</td>
+    <td>37,00</td>
+    <td>Critical threshold level.</td>
+  </tr>
+  <tr>
     <td>msg.0</td>
     <td>OK: heartbeat is up</td>
     <td>Message to be used when `value` evaluation is sucessful.</td>
