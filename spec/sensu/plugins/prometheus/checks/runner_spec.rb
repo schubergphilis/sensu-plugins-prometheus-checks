@@ -40,15 +40,26 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
     runner.run
     expect(runner.status).to be 0
-    expect(runner.output).to eq('OK: Ran 1 checks succesfully on 3 events!')
+    expect(runner.output).to eq('OK: Ran 2 checks succesfully on 4 events!')
+
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
       'name' => 'custom_heartbeat',
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
-      'status' => 0,
-      'source' => 'sbppapik8s-worker3'
+      'source' => 'sbppapik8s-worker3',
+      'status' => 0
+    )
+
+    expect(runner.events).to include(
+      'address' => 'datahub-rtwind-source-ebase-connector-ebase.services.schubergphilis.com',
+      'name' => 'custom_functional_check',
+      'occurrences' => 3,
+      'output' => 'OK: Functional Check is working!',
+      'reported_by' => 'reported_by_host',
+      'source' => 'datahub-rtwind-source-ebase-connector-ebase',
+      'status' => 0
     )
   end
 end

@@ -13,3 +13,12 @@ custom:
     msg:
       0: 'OK: Endpoint is alive and kicking'
       2: 'CRIT: Endpoints not reachable!'
+  - name: functional_check
+    query: max_over_time(producer_topic_metrics_record_send_rate{topic="sys_ebase_power_raw"}[1d])
+    cfg:
+      warn: 1300
+      crit: 1500
+    msg:
+      0: 'OK: Functional Check is working!'
+      1: 'WARN: Functional Check is warning! :-|!'
+      2: 'CRIT: Functional Check is critical! :-('
