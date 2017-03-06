@@ -171,12 +171,12 @@ custom:
   </tr>
   <tr>
     <td>cfg.warn</td>
-    <td>33,00</td>
+    <td>33.00</td>
     <td>Warning threshold level</td>
   </tr>
   <tr>
     <td>cfg.crit</td>
-    <td>37,00</td>
+    <td>37.00</td>
     <td>Critical threshold level.</td>
   </tr>
   <tr>
