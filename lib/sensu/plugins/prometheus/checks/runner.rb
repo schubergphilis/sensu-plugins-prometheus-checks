@@ -118,7 +118,7 @@ module Sensu
                 value = metric['value']
                 name = custom['name']
 
-                if custom.key?('check')
+                if custom.key?('check') && !custom['check']['type'].empty?
                   # calling local method to determine metric status
                   status = send(
                     custom['check']['type'],
