@@ -18,4 +18,14 @@ describe Sensu::Plugins::Prometheus::Checks, :vcr do
     expect(equals(1, 1)).to equal(0)
     expect(equals(1, 2)).to equal(2)
   end
+
+  it '#bellow' do
+    expect(bellow(1, 1)).to equal(2)
+    expect(bellow(1, 2)).to equal(0)
+  end
+
+  it '#above' do
+    expect(above(1, 1)).to equal(2)
+    expect(above(2, 1)).to equal(0)
+  end
 end
