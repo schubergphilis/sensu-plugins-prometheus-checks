@@ -30,8 +30,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'Memory 29% |memory=29',
       'reported_by' => 'reported_by_host',
-      'status' => 0,
-      'source' => 'sbppapik8s-worker2'
+      'source' => 'sbppapik8s-worker2',
+      'status' => 0
     )
   end
 
@@ -48,7 +48,6 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
-      'source' => 'sbppapik8s-worker3',
       'status' => 0
     )
 
@@ -58,7 +57,6 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Functional Check is working!',
       'reported_by' => 'reported_by_host',
-      'source' => 'datahub-rtwind-source-ebase-connector-ebase',
       'status' => 0
     )
   end

@@ -4,6 +4,7 @@ config:
   domain: services.schubergphilis.com
   occurrences: 3
   whitelist: sbppapik8s
+  use_default_source: true
 custom:
   - name: heartbeat
     query: up
