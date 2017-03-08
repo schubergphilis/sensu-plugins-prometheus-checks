@@ -172,8 +172,8 @@ module Sensu
 
               # removing source key to use local's sensu source name (hostname)
               if @config.key?('config') && \
-                  @config['config'].key?('use_default_source') && \
-                  @config['config']['use_default_source']
+                 @config['config'].key?('use_default_source') && \
+                 @config['config']['use_default_source']
                 log.debug("Removing 'source' from event, using Sensu's default")
                 event.delete('source')
               end
