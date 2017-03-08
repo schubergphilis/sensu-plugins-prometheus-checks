@@ -161,8 +161,8 @@ custom:
   </tr>
   <tr>
     <td>check.type</td>
-    <td>(equals|bellow|agove)</td>
-    <td>Type of evaluation applied against value. Avilable: `equals`, `bellow` and `above`</td>
+    <td>(equals|below|above)</td>
+    <td>Type of evaluation applied against value. Avilable: `equals`, `below` and `above`</td>
   </tr>
   <tr>
     <td>check.value</td>

@@ -19,9 +19,9 @@ describe Sensu::Plugins::Prometheus::Checks, :vcr do
     expect(equals(1, 2)).to equal(2)
   end
 
-  it '#bellow' do
-    expect(bellow(1, 1)).to equal(2)
-    expect(bellow(1, 2)).to equal(0)
+  it '#below' do
+    expect(below(1, 1)).to equal(2)
+    expect(below(1, 2)).to equal(0)
   end
 
   it '#above' do

@@ -30,8 +30,8 @@ module Sensu
           status
         end
 
-        # Return zero if result is bellow value.
-        def bellow(result, value)
+        # Return zero if result is below value.
+        def below(result, value)
           status = 2
           status = 0 if result.to_f < value.to_f
           status
