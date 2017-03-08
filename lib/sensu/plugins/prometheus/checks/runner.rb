@@ -118,7 +118,7 @@ module Sensu
                 value = metric['value']
                 name = custom['name']
 
-                if custom.key?('check')
+                if custom.key?('check') && !custom['check']['type'].empty?
                   # calling local method to determine metric status
                   status = send(
                     custom['check']['type'],
@@ -169,6 +169,15 @@ module Sensu
                 )
                 next
               end
+
+              # removing source key to use local's sensu source name (hostname)
+              if @config.key?('config') && \
+                 @config['config'].key?('use_default_source') && \
+                 @config['config']['use_default_source']
+                log.debug("Removing 'source' from event, using Sensu's default")
+                event.delete('source')
+              end
+
               # selecting the non-succesful events
               non_successful_events << event if event['status'] != 0
               # dispatching event to Sensu

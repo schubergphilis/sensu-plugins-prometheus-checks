@@ -29,6 +29,20 @@ module Sensu
           status = 0 if result.to_f == value.to_f
           status
         end
+
+        # Return zero if result is below value.
+        def below(result, value)
+          status = 2
+          status = 0 if result.to_f < value.to_f
+          status
+        end
+
+        # Return zero if result is above value.
+        def above(result, value)
+          status = 2
+          status = 0 if result.to_f > value.to_f
+          status
+        end
       end
     end
   end

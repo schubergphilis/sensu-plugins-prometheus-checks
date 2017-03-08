@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sensu-plugins-prometheus-checks (2.1.0)
+    sensu-plugins-prometheus-checks (2.2.1)
 
 GEM
   remote: https://rubygems.org/
