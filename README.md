@@ -75,6 +75,7 @@ config:
   occurrences: 3
   domain: example.com
   whitelist: sbppapik8s.*
+  use_default_source: false
 checks:
   - service:
     name: kube-controller-manager.service
@@ -212,6 +213,11 @@ custom:
     <td>whitelist</td>
     <td>sbppapik8s.*</td>
     <td>regex used as a safety whitelist to make sure the source names are correct</td>
+  </tr>
+  <tr>
+    <td>use_default_source</td>
+    <td>false</td>
+    <td>When `true` the source of the events will be Sensu-Client's</td>
   </tr>
   </table>
 
