@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.summary = 'Sensu plugin for monitoring servers by querying Prometheus'
   spec.description = 'Sensu plugin to compose complex Prometheus queries and ' \
     'execute result-set evaluation'
-  spec.homepage = 'https://sbp.gitlab.schubergphilis.com/saas/sensu-plugins-prometheus-checks'
+  spec.homepage = 'https://github.com/schubergphilis/sensu-plugins-prometheus-checks'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
