@@ -24,3 +24,5 @@ end
 # setting up environment variables that trigger VCR calls
 ENV['PROM_DEBUG'] = 'true'
 ENV['PROMETHEUS_ENDPOINT'] = '127.0.0.1:19090'
+ENV['SENSU_SOCKET_ADDRESS'] = '127.0.0.1'
+ENV['SENSU_SOCKET_PORT'] = '3030'
