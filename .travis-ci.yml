@@ -1,0 +1,9 @@
+sudo: required
+
+language: ruby
+
+services:
+    - docker
+
+script:
+  - /bin/bash ./test.sh
