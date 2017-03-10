@@ -6,6 +6,7 @@ AllCops:
     - '*.gemspec'
     - 'Gemfile'
     - 'Rakefile'
+    - 'vendor/**/*'
 
 Style/GlobalVars:
   Exclude:
