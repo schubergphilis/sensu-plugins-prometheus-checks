@@ -60,4 +60,72 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'status' => 0
     )
   end
+
+  it '.run: ignores invalid checks' do
+    config = YAML.load_file('spec/config/prometheus_checks_custom_invalid.yml')
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    runner.run
+    expect(runner.status).to be 1
+
+    expect(runner.events).to include(
+      'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
+      'name' => 'custom_before',
+      'occurrences' => 3,
+      'output' => 'No output message defined for this check',
+      'reported_by' => 'reported_by_host',
+      'source' => 'sbppapik8s-worker3',
+      'status' => 0
+    )
+    # This check is defined after the invalid check
+    expect(runner.events).to include(
+      'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
+      'name' => 'custom_after',
+      'occurrences' => 3,
+      'output' => 'OK: Endpoint is alive and kicking',
+      'reported_by' => 'reported_by_host',
+      'source' => 'sbppapik8s-worker3',
+      'status' => 0
+    )
+  end
+
+  it '.run: expects events to be sent to the dispatcher' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    config['config']['whitelist'] = '.*'
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    runner.run
+    expect(runner.events.length).to_not eql(0)
+  end
+
+  it '.run: matches nothing because there is not anything whitelisted' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    config['config']['whitelist'] = 'nothing_should_match_this'
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    runner.run
+    expect(runner.events.length).to eql(0)
+  end
+
+  it '.run: matches only whitelisted hosts' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    config['config']['whitelist'] = 'sbppapik8s-worker1'
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    runner.run
+    expect(runner.events).to include(
+      'address' => 'sbppapik8s-worker1.services.schubergphilis.com',
+      'name' => 'custom_heartbeat',
+      'occurrences' => 3,
+      'output' => 'OK: Endpoint is alive and kicking',
+      'reported_by' => 'reported_by_host',
+      'source' => 'sbppapik8s-worker1',
+      'status' => 0
+    )
+    expect(runner.events).to_not include(
+      'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
+      'name' => 'custom_heartbeat',
+      'occurrences' => 3,
+      'output' => 'OK: Endpoint is alive and kicking',
+      'reported_by' => 'reported_by_host',
+      'source' => 'sbppapik8s-worker3',
+      'status' => 0
+    )
+  end
 end

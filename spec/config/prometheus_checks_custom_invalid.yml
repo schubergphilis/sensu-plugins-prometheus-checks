@@ -1,0 +1,26 @@
+#---
+config:
+  reported_by: reported_by_host
+  domain: services.schubergphilis.com
+  occurrences: 3
+  whitelist: .*
+custom:
+  - name: before
+    query: up
+    check:
+      type: equals
+      value: 1
+    msg:
+      2: 'CRIT: Endpoints not reachable!'
+  - name: invalid
+    query: up
+    msg:
+      0: 'OK: Endpoint is alive and kicking'
+  - name: after
+    query: up
+    check:
+      type: equals
+      value: 1
+    msg:
+      0: 'OK: Endpoint is alive and kicking'
+      2: 'CRIT: Endpoints not reachable!'

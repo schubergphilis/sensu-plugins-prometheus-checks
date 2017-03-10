@@ -56,11 +56,13 @@ module Sensu
             begin
               # invoke method name method on metric object
               metrics = @metrics.send(name, check_cfg)
+            # :nocov:
             rescue NoMethodError => e
               log.error(
                 "Method '#{name}' is not present on Metrics object: '#{e}'"
               )
             end
+            # :nocov:
             metrics
           end
 
@@ -142,12 +144,15 @@ module Sensu
                 log.debug("Custom Check: name='#{name}', value='#{value}'")
 
                 # making sure the custom check has the status defined
-                raise "Can't find 'output' message in custom check: '#{name}" \
-                  if !custom.key?('msg') || !custom['msg'].key?(status)
+                output = if custom['msg'].key?(status)
+                           custom['msg'][status].to_s
+                         else
+                           'No output message defined for this check'
+                         end
 
                 append_event(
                   "custom_#{name}",
-                  custom['msg'][status].to_s,
+                  output,
                   status,
                   metric['source']
                 )
@@ -160,16 +165,16 @@ module Sensu
           def evaluate_and_dispatch_events
             non_successful_events = []
 
-            @events.each do |event|
+            @events.reverse_each do |event|
               # skipping events that are not whitelisted
-              if @config.key?('whitelist') && event['source'] !~ /#{@config['whitelist']}/
+              if @config['config'].key?('whitelist') && event['source'] !~ /#{@config['config']['whitelist']}/
+                @events.delete(event)
                 log.debug(
                   "Skipping event! Source '#{event['source']}' does not " \
-                    "match /#{@config['whitelist']}/"
+                    "match /#{@config['config']['whitelist']}/"
                 )
                 next
               end
-
               # removing source key to use local's sensu source name (hostname)
               if @config.key?('config') && \
                  @config['config'].key?('use_default_source') && \
@@ -177,7 +182,6 @@ module Sensu
                 log.debug("Removing 'source' from event, using Sensu's default")
                 event.delete('source')
               end
-
               # selecting the non-succesful events
               non_successful_events << event if event['status'] != 0
               # dispatching event to Sensu

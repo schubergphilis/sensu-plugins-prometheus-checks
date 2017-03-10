@@ -9,7 +9,7 @@ AllCops:
 
 Style/GlobalVars:
   Exclude:
-    - 'spec/*.rb'
+    - 'spec/**/*.rb'
 
 Style/FrozenStringLiteralComment:
   Enabled: false
