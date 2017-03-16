@@ -1,5 +1,9 @@
 # Sensu Kubernetes Prometheus Plugin
 
+[![build status](https://api.travis-ci.org/schubergphilis/sensu-plugins-prometheus-checks.svg?branch=master)](https://travis-ci.org/schubergphilis/sensu-plugins-prometheus-checks)
+[![codecov.io](https://codecov.io/github/schubergphilis/sensu-plugins-prometheus-checks/coverage.svg?branch=master)](https://codecov.io/gh/schubergphilis/sensu-plugins-prometheus-checks)
+[![gem version](https://badge.fury.io/rb/sensu-plugins-prometheus-checks.svg)](http://badge.fury.io/rb/sensu-plugins-prometheus-checks)
+
 ## Description
 Sensu plugin designed to query prometheus data output from node-exporter
 

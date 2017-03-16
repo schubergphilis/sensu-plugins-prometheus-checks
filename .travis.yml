@@ -7,3 +7,10 @@ services:
 
 script:
   - /bin/bash ./test.sh
+
+deploy:
+  provider: rubygems
+  api_key:
+    secure: jcfJuW8IX7qBLIq2wyeXYvq3n4swwGUfs/Gk2IRkmo9AwbbTaNmzbNJgedEueKdNWbaMoW+cVPKWGuY2X7pIETQBsBm2TIJb4s/Y4hv/zGR8GyyHTVZsmX1BrW7tFWTpR16VZZdtql9T21eoTGs302QieE5b+k/iFfvXR6maaGUtLd32YA6QKGJ6WoTIVqhwkdBzGWgseMI6g31JrHQjprHw3mJq4CoDZhwNDCF1+IFtdjEvMf5fuGqcs+duXjjJh1MYU5/dM/WpmT1zsPXCJGp2R59+hI0+4SF3c04o4xM4wIDhrp3q8K409Wy5rQHN+b9kV21sGnMJ1TFmZkarNhTAFxkd7XCXkqUyiOai3d8MZUBxrr0kM+GN0CbBhcc4IRB1+w4b16Hs1HffcVyBCsfsnNtC96TFSMddrQNWm6/UapKe5udcemPz2Kqcj+JawOVQ0cZDW0KtOOeEF13FQEg+uXmAUV6eP6T2oGTge5fY/3aFZp2FUCqnKRVBMGWFuP4LUfdE9EUmciO7PsyQaARJByV9niHUMws62TxY1IvuI2OQFDV+uGKPahWUSvvFkVgttcJDle1t3Qn+FsLEs5ZCXlUQQ0QK/CpZlcpRMZ9WuSNyY3RlaxjemA/w0XjUNneihYaZDISFz/VVpHqZYA15dD3QJuuw39Dvs0Nt7OQ=
+  on:
+    tags: true
