@@ -5,6 +5,16 @@ require 'yaml'
 require 'rspec/expectations'
 require 'vcr'
 require 'simplecov'
+require 'codecov'
+
+if ENV['TRAVIS']
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::Codecov,
+    SimpleCov::Formatter::HTMLFormatter
+  ]
+else
+  SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+end
 
 require 'sensu/plugins/events/dispatcher'
 require 'sensu/plugins/prometheus/client'
