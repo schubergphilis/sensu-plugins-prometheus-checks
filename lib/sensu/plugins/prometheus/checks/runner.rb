@@ -154,7 +154,7 @@ module Sensu
                   "custom_#{name}",
                   output,
                   status,
-                  metric['source']
+                  metric['source'] || '<<UNKNOWN_SOURCE>>'
                 )
               end
             end
@@ -224,7 +224,7 @@ module Sensu
               log.info("[node_exporter] instance: '#{source}', nodename: '#{nodename}'")
               map[source] = nodename
             end
-            log.warn('Unable to query the node_exporter intances from Prometheus') \
+            log.warn('Unable to query the node_exporter instances from Prometheus') \
               if map.empty?
             map
           end
