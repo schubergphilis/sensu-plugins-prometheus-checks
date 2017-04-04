@@ -44,7 +44,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
 
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
-      'name' => 'custom_heartbeat',
+      'name' => 'heartbeat',
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
@@ -53,7 +53,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
 
     expect(runner.events).to include(
       'address' => 'datahub-rtwind-source-ebase-connector-ebase.services.schubergphilis.com',
-      'name' => 'custom_functional_check',
+      'name' => 'functional_check',
       'occurrences' => 3,
       'output' => 'OK: Functional Check is working!',
       'reported_by' => 'reported_by_host',
@@ -69,7 +69,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
 
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
-      'name' => 'custom_before',
+      'name' => 'before',
       'occurrences' => 3,
       'output' => 'No output message defined for this check',
       'reported_by' => 'reported_by_host',
@@ -79,7 +79,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     # This check is defined after the invalid check
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
-      'name' => 'custom_after',
+      'name' => 'after',
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
@@ -111,7 +111,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     runner.run
     expect(runner.events).to include(
       'address' => 'sbppapik8s-worker1.services.schubergphilis.com',
-      'name' => 'custom_heartbeat',
+      'name' => 'heartbeat',
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
@@ -120,7 +120,7 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     )
     expect(runner.events).to_not include(
       'address' => 'sbppapik8s-worker3.services.schubergphilis.com',
-      'name' => 'custom_heartbeat',
+      'name' => 'heartbeat',
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
