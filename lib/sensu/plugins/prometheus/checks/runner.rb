@@ -257,7 +257,9 @@ module Sensu
               'output' => output,
               'reported_by' => @config['config']['reported_by'],
               'status' => status,
-              'source' => sensu_safe(nodename)
+              'source' => sensu_safe(nodename),
+              'ttl' => @config['config']['ttl'] || 300,
+              'ttl_status' => @config['config']['ttl_status'] || 1
             }
           end
         end
