@@ -216,6 +216,16 @@ custom:
     <td>regex used as a safety whitelist to make sure the source names are correct</td>
   </tr>
   <tr>
+    <td>ttl</td>
+    <td>300</td>
+    <td>Override the Sensu TTL in seconds</td>
+  </tr>
+  <tr>
+    <td>ttl_status</td>
+    <td>1</td>
+    <td>Override the status code for an expiring Sensu TTL</td>
+  </tr>
+  <tr>
     <td>use_default_source</td>
     <td>false</td>
     <td>When `true` the source of the events will be Sensu-Client's</td>

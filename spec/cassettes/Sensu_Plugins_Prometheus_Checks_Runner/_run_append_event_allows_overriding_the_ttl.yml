@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:19090/api/v1/query?query=max_over_time(node_uname_info%5B1d%5D)
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, Origin
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Date
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 04 Apr 2017 14:53:57 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"domainname":"(none)","instance":"mcpamgmt1-etcd03:9100","job":"etcd","machine":"x86_64","nodename":"mcpamgmt1-etcd03","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-master2:9100","job":"masters","machine":"x86_64","nodename":"mcpamgmt1-master2","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-master1:9100","job":"masters","machine":"x86_64","nodename":"mcpamgmt1-master1","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-node2:9100","job":"nodes","machine":"x86_64","nodename":"mcpamgmt1-node2","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-master3:9100","job":"masters","machine":"x86_64","nodename":"mcpamgmt1-master3","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-node3:9100","job":"nodes","machine":"x86_64","nodename":"mcpamgmt1-node3","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-etcd01:9100","job":"etcd","machine":"x86_64","nodename":"mcpamgmt1-etcd01","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-node1:9100","job":"nodes","machine":"x86_64","nodename":"mcpamgmt1-node1","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]},{"metric":{"domainname":"(none)","instance":"mcpamgmt1-etcd02:9100","job":"etcd","machine":"x86_64","nodename":"mcpamgmt1-etcd02","release":"4.8.15-coreos","sysname":"Linux","version":"#1
+        SMP Sun Jan 8 12:49:31 UTC 2017"},"value":[1491317637.331,"1"]}]}}'
+    http_version: 
+  recorded_at: Tue, 04 Apr 2017 14:53:57 GMT
+recorded_with: VCR 3.0.3

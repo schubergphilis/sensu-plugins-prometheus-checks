@@ -30,6 +30,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'Memory 29% |memory=29',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'source' => 'sbppapik8s-worker2',
       'status' => 0
     )
@@ -48,6 +50,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'status' => 0
     )
 
@@ -57,6 +61,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Functional Check is working!',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'status' => 0
     )
   end
@@ -73,6 +79,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'No output message defined for this check',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'source' => 'sbppapik8s-worker3',
       'status' => 0
     )
@@ -83,6 +91,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'source' => 'sbppapik8s-worker3',
       'status' => 0
     )
@@ -115,6 +125,8 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'source' => 'sbppapik8s-worker1',
       'status' => 0
     )
@@ -124,8 +136,32 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'occurrences' => 3,
       'output' => 'OK: Endpoint is alive and kicking',
       'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
       'source' => 'sbppapik8s-worker3',
       'status' => 0
     )
+  end
+
+  it '.run.sensu_safe: returns sensu safe check names' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    expect(runner.send(:sensu_safe, 'test')).to eql('test')
+    expect(runner.send(:sensu_safe, 'test-hostname:9100')).to eql('test-hostname_9100')
+    expect(runner.send(:sensu_safe, 'check_disk_/root/')).to eql('check_disk__root_')
+  end
+
+  it '.run.append_event: allows overriding the ttl' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    config['config']['ttl'] = 180
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    expect(runner.send(:append_event, 'name', 'output', 'status', 'source')[0]['ttl']).to eql(180)
+  end
+
+  it '.run.append_event: allows overriding the ttl_status' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    config['config']['ttl_status'] = 2
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    expect(runner.send(:append_event, 'name', 'output', 'status', 'source')[0]['ttl_status']).to eql(2)
   end
 end
