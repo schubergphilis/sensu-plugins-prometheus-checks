@@ -151,7 +151,7 @@ module Sensu
                          end
 
                 append_event(
-                  "custom_#{name}",
+                  name,
                   output,
                   status,
                   metric['source'] || '<<UNKNOWN_SOURCE>>'

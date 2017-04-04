@@ -7,7 +7,7 @@ require 'vcr'
 require 'simplecov'
 require 'codecov'
 
-if ENV['TRAVIS']
+if ENV['TRAVIS'] == 'true'
   SimpleCov.formatters = [
     SimpleCov::Formatter::Codecov,
     SimpleCov::Formatter::HTMLFormatter
