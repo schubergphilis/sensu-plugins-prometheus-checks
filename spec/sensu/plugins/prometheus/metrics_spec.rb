@@ -40,9 +40,26 @@ describe Sensu::Plugins::Prometheus::Metrics, :vcr do
   end
 
   it '.predict_disk_all' do
-    cfg = { 'days' => '30', 'filter' => '{mountpoint="/var/lib/docker"}' }
+    cfg = {
+      'days' => '30',
+      'filter' => '{mountpoint="/var/lib/docker"}',
+      'source' => 'test123'
+    }
     results = metrics.predict_disk_all(cfg)
-    expect(results).to be_empty
+    expect(results).to include('output' => 'No disks are predicted to run out of space in the next 30 days',
+                               'name' => 'predict_disk_all',
+                               'status' => 0,
+                               'source' => 'test123')
+    cfg = {
+      'days' => '1',
+      'filter' => '{mountpoint="/var/lib/docker"}',
+      'source' => 'test123'
+    }
+    results = metrics.predict_disk_all(cfg)
+    expect(results).to include('output' => 'Disks predicted to run out of space in the next 1 days: node-exporter1:9100:/var/lib/docker',
+                               'name' => 'predict_disk_all',
+                               'status' => 1,
+                               'source' => 'test123')
   end
 
   it '.service' do

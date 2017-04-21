@@ -164,4 +164,22 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
     runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
     expect(runner.send(:append_event, 'name', 'output', 'status', 'source')[0]['ttl_status']).to eql(2)
   end
+
+  it '.run: Allows overriding the status from the metric' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    runner.run
+
+    expect(runner.events).to include(
+      'address' => 'sbppapik8s.services.schubergphilis.com',
+      'name' => 'check_predict_disk_all',
+      'occurrences' => 3,
+      'output' => 'Disks predicted to run out of space in the next 1 days: node-exporter1:9100:/var/lib/docker',
+      'reported_by' => 'reported_by_host',
+      'ttl' => 300,
+      'ttl_status' => 1,
+      'source' => 'sbppapik8s',
+      'status' => 1
+    )
+  end
 end

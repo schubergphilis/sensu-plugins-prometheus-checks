@@ -27,8 +27,6 @@ module Sensu
               'Memory <%= value %>% |memory=<%= value %>',
             'memory_per_cluster' => \
               'Cluster Memory: <%= value %>% |memory=<%= value %>"',
-            'predict_disk_all' => \
-              "Disks to run out of space in the next <%= cfg['days'] %> days: <%= value %>",
             'service' => \
               "Service: <%= cfg['name'] %> (<%= cfg['state'] %>=<%= value %>)"
           }.freeze

@@ -78,7 +78,9 @@ module Sensu
                 status = 0
 
                 # on service it will come with "state_required" flag
-                if check_name == 'service'
+                if metric.key? 'status'
+                  status = metric['status']
+                elsif check_name == 'service'
                   # adding defaults in case they are not set
                   check_cfg = check_cfg.merge(
                     'state' => 'active',
@@ -99,9 +101,15 @@ module Sensu
                 template_variables = metric
                 template_variables['cfg'] = check_cfg
 
+                if metric.key? 'output'
+                  output = metric['output']
+                else
+                  output = @tmpl.render(check['check'], template_variables)
+                end
+
                 append_event(
                   "check_#{check_name}",
-                  @tmpl.render(check['check'], template_variables),
+                  output,
                   status,
                   metric['source']
                 )
