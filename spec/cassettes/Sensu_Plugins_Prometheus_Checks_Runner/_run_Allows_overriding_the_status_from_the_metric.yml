@@ -29,14 +29,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
-      - '247'
+      - '248'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"xenserver-pv-version.service","state":"active"},"value":[1488360211.91,"0"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"xenserver-pv-version.service","state":"active"},"value":[1492164557.794,"0"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=max_over_time(node_uname_info%5B1d%5D)
@@ -66,17 +66,17 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '860'
     body:
       encoding: UTF-8
       string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"domainname":"(none)","instance":"node-exporter2:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker2","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
-        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1488360211.917,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter1:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker1.fakedomain.tld","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
-        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1488360211.917,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter3:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker3","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
-        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1488360211.917,"1"]}]}}'
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1492164557.802,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter1:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker1.fakedomain.tld","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1492164557.802,"1"]},{"metric":{"domainname":"(none)","instance":"node-exporter3:9100","job":"prometheus","machine":"x86_64","nodename":"sbppapik8s-worker3","release":"4.5.0-coreos-r1","sysname":"Linux","version":"#2
+        SMP Tue May 24 17:45:36 UTC 2016"},"value":[1492164557.802,"1"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='running.service',state='active'%7D
@@ -106,14 +106,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '408'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"running.service","state":"active"},"value":[1488360211.924,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"running.service","state":"active"},"value":[1488360211.924,"1"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"running.service","state":"active"},"value":[1492164557.811,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"running.service","state":"active"},"value":[1492164557.811,"1"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='not-running.service',state='active'%7D
@@ -143,14 +143,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '416'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"not-running.service","state":"active"},"value":[1488360211.931,"0"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"not-running.service","state":"active"},"value":[1488360211.931,"0"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"not-running.service","state":"active"},"value":[1492164557.823,"0"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"not-running.service","state":"active"},"value":[1492164557.823,"0"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='kube-controller-manager.service',state='active'%7D
@@ -180,14 +180,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '63'
     body:
       encoding: UTF-8
       string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='kube-scheduler.service',state='active'%7D
@@ -217,14 +217,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '63'
     body:
       encoding: UTF-8
       string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='kube-kubelet.service',state='active'%7D
@@ -254,14 +254,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '596'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1488360211.957,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1488360211.957,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1488360211.957,"1"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1492164557.844,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1492164557.844,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"kube-kubelet.service","state":"active"},"value":[1492164557.844,"1"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=node_systemd_unit_state%7Bname='kube-proxy.service',state='active'%7D
@@ -291,14 +291,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '590'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1488360211.965,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1488360211.965,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1488360211.965,"1"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter1:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1492164557.853,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter3:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1492164557.853,"1"]},{"metric":{"__name__":"node_systemd_unit_state","instance":"node-exporter2:9100","job":"prometheus","name":"kube-proxy.service","state":"active"},"value":[1492164557.853,"1"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=100-((node_memory_MemAvailable/node_memory_MemTotal)*100)
@@ -328,14 +328,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '394'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter3:9100","job":"prometheus"},"value":[1488360211.974,"29.718866272118746"]},{"metric":{"instance":"node-exporter2:9100","job":"prometheus"},"value":[1488360211.974,"29.718866272118746"]},{"metric":{"instance":"node-exporter1:9100","job":"prometheus"},"value":[1488360211.974,"41.65704379520997"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"instance":"node-exporter3:9100","job":"prometheus"},"value":[1492164557.863,"29.718866272118746"]},{"metric":{"instance":"node-exporter2:9100","job":"prometheus"},"value":[1492164557.863,"29.718866272118746"]},{"metric":{"instance":"node-exporter1:9100","job":"prometheus"},"value":[1492164557.863,"41.65704379520997"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=100-((node_filesystem_avail%7Bmountpoint=%22/%22%7D/node_filesystem_size%7Bmountpoint=%22/%22%7D)*100)
@@ -365,14 +365,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:31 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '554'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/"},"value":[1488360211.984,"18.17927644150504"]},{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter2:9100","job":"prometheus","mountpoint":"/"},"value":[1488360211.984,"18.17927644150504"]},{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter3:9100","job":"prometheus","mountpoint":"/"},"value":[1488360211.984,"18.17927644150504"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter2:9100","job":"prometheus","mountpoint":"/"},"value":[1492164557.873,"18.17927644150504"]},{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/"},"value":[1492164557.873,"18.17927644150504"]},{"metric":{"device":"/dev/vda9","fstype":"ext4","instance":"node-exporter3:9100","job":"prometheus","mountpoint":"/"},"value":[1492164557.873,"18.17927644150504"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:31 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=100-((node_filesystem_avail%7Bmountpoint=%22/var/lib/docker%22%7D/node_filesystem_size%7Bmountpoint=%22/var/lib/docker%22%7D)*100)
@@ -402,14 +402,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:32 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
-      - '596'
+      - '592'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter3:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1488360212.011,"29.620547021108536"]},{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter2:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1488360212.011,"29.620547021108536"]},{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1488360212.011,"29.620547021108536"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter3:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492164557.88,"29.620547021108536"]},{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492164557.88,"87.63801383313366"]},{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter2:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492164557.88,"29.620547021108536"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=sum(node_load5%7Bjob=%22prometheus%22%7D)/count(node_cpu%7Bmode=%22system%22,job=%22prometheus%22%7D)
@@ -439,14 +439,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:32 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '108'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1488360212.029,"0.15"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1492164557.887,"0.15"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=sum(node_load5%7Bjob=%22prometheus%22%7D)/(count(node_cpu%7Bmode=%22system%22,job=%22prometheus%22%7D)-(count(node_cpu%7Bmode=%22system%22,job=%22prometheus%22%7D)/count(node_load5%7Bjob=%22prometheus%22%7D))*1)
@@ -476,14 +476,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:32 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '123'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1488360212.043,"0.22499999999999998"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1492164557.899,"0.22499999999999998"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=up
@@ -513,14 +513,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 Mar 2017 09:23:32 GMT
+      - Fri, 14 Apr 2017 10:09:17 GMT
       Content-Length:
       - '392'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"up","instance":"node-exporter3:9100","job":"prometheus"},"value":[1488360212.055,"1"]},{"metric":{"__name__":"up","instance":"node-exporter2:9100","job":"prometheus"},"value":[1488360212.055,"1"]},{"metric":{"__name__":"up","instance":"node-exporter1:9100","job":"prometheus"},"value":[1488360212.055,"1"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"up","instance":"node-exporter2:9100","job":"prometheus"},"value":[1492164557.917,"1"]},{"metric":{"__name__":"up","instance":"node-exporter3:9100","job":"prometheus"},"value":[1492164557.917,"1"]},{"metric":{"__name__":"up","instance":"node-exporter1:9100","job":"prometheus"},"value":[1492164557.917,"1"]}]}}'
     http_version: 
-  recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+  recorded_at: Fri, 14 Apr 2017 10:09:17 GMT
 - request:
     method: get
     uri: http://127.0.0.1:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7B%7D%5B24h%5D,%2086400)%20%3C%200
@@ -550,12 +550,12 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 14 Apr 2017 10:12:54 GMT
+      - Fri, 14 Apr 2017 10:12:55 GMT
       Content-Length:
       - '240'
     body:
       encoding: UTF-8
-      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492164774.817,"-774561972118.9948"]}]}}'
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492164775.269,"-774566077027.9852"]}]}}'
     http_version: 
-  recorded_at: Fri, 14 Apr 2017 10:12:54 GMT
+  recorded_at: Fri, 14 Apr 2017 10:12:55 GMT
 recorded_with: VCR 3.0.3

@@ -37,4 +37,41 @@ http_interactions:
       string: '{"status":"success","data":{"resultType":"vector","result":[]}}'
     http_version: 
   recorded_at: Wed, 01 Mar 2017 09:23:32 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:19090/api/v1/query?query=predict_linear(node_filesystem_avail%7Bmountpoint=%22/var/lib/docker%22%7D%5B24h%5D,%2086400)%20%3C%200
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, Origin
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Date
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 14 Apr 2017 09:49:06 GMT
+      Content-Length:
+      - '240'
+    body:
+      encoding: UTF-8
+      string: '{"status":"success","data":{"resultType":"vector","result":[{"metric":{"device":"/dev/vdb","fstype":"ext4","instance":"node-exporter1:9100","job":"prometheus","mountpoint":"/var/lib/docker"},"value":[1492163346.046,"-39889513876306.18"]}]}}'
+    http_version: 
+  recorded_at: Fri, 14 Apr 2017 09:49:06 GMT
 recorded_with: VCR 3.0.3
