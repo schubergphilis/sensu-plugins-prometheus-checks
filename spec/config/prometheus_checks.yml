@@ -59,6 +59,10 @@ checks:
       warn: 1.0
       crit: 2.0
       source: sbppapik8s
+  - check: predict_disk_all
+    cfg:
+      days: 1
+      source: sbppapik8s
 custom:
   - name: heartbeat
     query: up

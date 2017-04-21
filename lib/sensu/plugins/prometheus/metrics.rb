@@ -67,17 +67,36 @@ module Sensu
 
         # Compose query to predict disk usage on the last day.
         def predict_disk_all(cfg)
+          disks = []
           days = cfg['days'].to_i
           days_in_seconds = days.to_i * 86_400
           filter = cfg['filter'] || {}
           range_vector = cfg['sample_size'] || '24h'
+          exit_code = cfg['exit_code'] || 1
           query = format(
             'predict_linear(node_filesystem_avail%s[%s], %i) < 0',
             filter,
             range_vector,
             days_in_seconds
           )
-          prepare_metrics('predict_disk_all', @client.query(query))
+          @client.query(query).each do |result|
+            hostname = result['metric']['instance']
+            disk = result['metric']['mountpoint']
+            disks << "#{hostname}:#{disk}"
+          end
+
+          if disks.empty?
+            [{ 'status' => 0,
+               'output' => "No disks are predicted to run out of space in the next #{days} days",
+               'name' => 'predict_disk_all',
+               'source' => cfg['source'] }]
+          else
+            disks = disks.join(',')
+            [{ 'status' => exit_code.to_i,
+               'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}",
+               'name' => 'predict_disk_all',
+               'source' => cfg['source'] }]
+          end
         end
 
         # Service metrics will contain it's "state" as "value".
