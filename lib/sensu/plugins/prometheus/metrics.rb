@@ -86,10 +86,16 @@ module Sensu
           end
 
           if disks.empty?
-            [{ 'status' => 0, 'output' => "No disks are predicted to run out of space in the next #{days} days", 'name' => 'predict_disk_all', 'source' => cfg['source'] }]
+            [{ 'status' => 0,
+               'output' => "No disks are predicted to run out of space in the next #{days} days",
+               'name' => 'predict_disk_all',
+               'source' => cfg['source'] }]
           else
             disks = disks.join(',')
-            [{ 'status' => exit_code.to_i, 'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}", 'name' => 'predict_disk_all', 'source' => cfg['source'] }]
+            [{ 'status' => exit_code.to_i,
+               'output' => "Disks predicted to run out of space in the next #{days} days: #{disks}",
+               'name' => 'predict_disk_all',
+               'source' => cfg['source'] }]
           end
         end
 
