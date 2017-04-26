@@ -182,4 +182,13 @@ describe Sensu::Plugins::Prometheus::Checks::Runner, :vcr do
       'status' => 1
     )
   end
+
+  it '.run.source_nodename_map: correctly maps the hostnames' do
+    config = YAML.load_file('spec/config/prometheus_checks.yml')
+    runner = Sensu::Plugins::Prometheus::Checks::Runner.new(config)
+    source_nodename_map = runner.send(:source_nodename_map)
+    expect(source_nodename_map).to include('node-exporter1:9100' => 'sbppapik8s-worker1',
+                                           'node-exporter2:9100' => 'sbppapik8s-worker2',
+                                           'node-exporter3:9100' => 'sbppapik8s-worker3')
+  end
 end

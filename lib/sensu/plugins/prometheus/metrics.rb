@@ -1,4 +1,5 @@
 require 'sensu/plugins/utils/log'
+require 'sensu/plugins/prometheus/checks'
 
 module Sensu
   module Plugins
@@ -8,6 +9,7 @@ module Sensu
       # this class will be available as a final check.
       class Metrics
         include Sensu::Plugins::Utils::Log
+        include Sensu::Plugins::Prometheus::Checks
 
         def initialize(prometheus_client)
           @client = prometheus_client
@@ -36,33 +38,60 @@ module Sensu
         # avaiable.
         def disk(cfg)
           mountpoint = "mountpoint=\"#{cfg['mount']}\""
+          disk_name = cfg['name'] || nice_disk_name(cfg['mount'])
           query = @client.percent_query_free(
             "node_filesystem_size{#{mountpoint}}",
             "node_filesystem_avail{#{mountpoint}}"
           )
-          prepare_metrics('disk', @client.query(query))
+          prepare_metrics("disk_#{disk_name}", @client.query(query))
         end
 
         # Query percentage of free space on file-systems, ignoring by default
         # `tmpfs` or the regexp configured on check.
         def disk_all(cfg)
+          results = []
           ignored = cfg['ignore_fs'] || 'tmpfs'
           ignore_fs = "fstype!~\"#{ignored}\""
-          query = @client.percent_query_free(
-            "node_filesystem_files{#{ignore_fs}}",
-            "node_filesystem_files_free{#{ignore_fs}}"
-          )
-          prepare_metrics('disk_all', @client.query(query))
+
+          queries = [
+            {
+              'used' => 'node_filesystem_size',
+              'free' => 'node_filesystem_avail',
+              'name' => 'disk'
+            },
+            {
+              'used' => 'node_filesystem_files',
+              'free' => 'node_filesystem_files_free',
+              'name' => 'inode'
+            }
+          ]
+          queries.each do |q|
+            query = @client.percent_query_free(
+              "#{q['used']}{#{ignore_fs}}",
+              "#{q['free']}{#{ignore_fs}}"
+            )
+            @client.query(query).each do |result|
+              hostname = result['metric']['instance']
+              mountpoint = result['metric']['mountpoint']
+              disk_name = nice_disk_name(mountpoint)
+              percent = result['value'][1].to_i
+              results << { 'output' => "#{q['name'].capitalize}: #{mountpoint}, Usage: #{percent}% |#{q['name']}=#{percent}",
+                           'name' => "#{q['name']}_#{disk_name}",
+                           'source' => hostname }
+            end
+          end
+          results
         end
 
         # Queyr percentage of free inodes on check's configured mountpoint.
         def inode(cfg)
           mountpoint = "mountpoint=\"#{cfg['mount']}\""
+          disk_name = cfg['name'] || nice_disk_name(cfg['mount'])
           query = @client.percent_query_free(
             "node_filesystem_files{#{mountpoint}}",
             "node_filesystem_files_free{#{mountpoint}}"
           )
-          prepare_metrics('inode', @client.query(query))
+          prepare_metrics("inode_#{disk_name}", @client.query(query))
         end
 
         # Compose query to predict disk usage on the last day.
@@ -101,13 +130,22 @@ module Sensu
 
         # Service metrics will contain it's "state" as "value".
         def service(cfg)
-          defaults = { 'state' => 'active' }
+          results = []
+          defaults = {
+            'state' => 'active',
+            'state_required' => 1
+          }
           cfg = defaults.merge(cfg)
           query = format(
             "node_systemd_unit_state{name='%s',state='%s'}",
             cfg['name'], cfg['state']
           )
-          prepare_metrics('service', @client.query(query))
+          prepare_metrics("service_#{cfg['name']}", @client.query(query)).each do |metric|
+            metric['status'] = equals(metric['value'], cfg['state_required'])
+            metric['output'] = "Service: #{cfg['name']} (#{cfg['state']}=#{metric['value']})"
+            results << metric
+          end
+          results
         end
 
         # Query the percentage free memory.
@@ -132,7 +170,7 @@ module Sensu
           @client.query(query).each do |result|
             value = result['value'][1].to_f.round(2)
             log.debug("[memory_per_cluster] value: '#{value}', source: '#{source}'")
-            metrics << { 'source' => source, 'value' => value }
+            metrics << { 'source' => source, 'value' => value, 'name' => "#{cluster}_memory" }
           end
           metrics
         end
@@ -153,7 +191,7 @@ module Sensu
             "[load_per_cluster] value: '#{value}', source: '#{source}'"
           )
 
-          [{ 'source' => source, 'value' => value }]
+          [{ 'source' => source, 'value' => value, 'name' => "#{cluster}_load" }]
         end
 
         # Returns a single metric entry, with the sum of the total load on
@@ -176,7 +214,7 @@ module Sensu
             "[load_per_cluster_minus_n] value: '#{value}', source: '#{source}'"
           )
 
-          [{ 'source' => source, 'value' => value }]
+          [{ 'source' => source, 'value' => value, 'name' => "#{cluster}_load_minus_n" }]
         end
 
         # Current load per CPU.
@@ -199,7 +237,8 @@ module Sensu
             )
             metrics << {
               'source' => source,
-              'value' => load_on_cpu
+              'value' => load_on_cpu,
+              'name' => 'load'
             }
           end
           metrics
@@ -214,9 +253,17 @@ module Sensu
             source = result['metric']['instance']
             value = result['value'][1].to_i
             log.debug("[#{metric_name}] value: '#{value}', source: '#{source}'")
-            metrics << { 'source' => source, 'value' => value }
+            metrics << { 'name' => metric_name, 'source' => source, 'value' => value }
           end
           metrics
+        end
+
+        def nice_disk_name(disk)
+          if disk == '/'
+            'root'
+          else
+            disk.gsub(%r{^/}, '').gsub(%r{/$}, '').gsub(%r{/}, '_')
+          end
         end
       end
     end
