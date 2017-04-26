@@ -4,7 +4,7 @@ describe Sensu::Plugins::Prometheus::Checks::Output, :vcr do
   let(:prometheus) { Sensu::Plugins::Prometheus::Client.new }
   let(:metrics) { Sensu::Plugins::Prometheus::Metrics.new(prometheus) }
   let(:output) { Sensu::Plugins::Prometheus::Checks::Output.new }
-  let(:whitelist) { '(^disk|inode|load|memory|service|_per_cluster)' }
+  let(:whitelist) { '(^disk|inode|load|memory|_per_cluster)' }
 
   it 'instantiates a Output class' do
     expect(output).to be_a(Sensu::Plugins::Prometheus::Checks::Output)

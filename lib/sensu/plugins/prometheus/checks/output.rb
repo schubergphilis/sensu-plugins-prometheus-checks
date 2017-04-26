@@ -26,9 +26,7 @@ module Sensu
             'memory' => \
               'Memory <%= value %>% |memory=<%= value %>',
             'memory_per_cluster' => \
-              'Cluster Memory: <%= value %>% |memory=<%= value %>"',
-            'service' => \
-              "Service: <%= cfg['name'] %> (<%= cfg['state'] %>=<%= value %>)"
+              'Cluster Memory: <%= value %>% |memory=<%= value %>'
           }.freeze
 
           def render(template_name, vars)

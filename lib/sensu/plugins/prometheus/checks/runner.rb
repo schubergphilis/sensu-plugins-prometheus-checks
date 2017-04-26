@@ -75,28 +75,17 @@ module Sensu
               check_cfg = check['cfg']
 
               collect_metrics(check_name, check_cfg).each do |metric|
-                status = 0
-
                 # on service it will come with "state_required" flag
-                if metric.key? 'status'
-                  status = metric['status']
-                elsif check_name == 'service'
-                  # adding defaults in case they are not set
-                  check_cfg = check_cfg.merge(
-                    'state' => 'active',
-                    'state_required' => 1
-                  )
-                  # giving a service hint by adding it's name
-                  check_name = "service_#{check_cfg['name']}"
-                  status = equals(metric['value'], check_cfg['state_required'])
-                else
-                  # normal threshold evaluation
-                  status = evaluate(
-                    metric['value'],
-                    check_cfg['warn'],
-                    check_cfg['crit']
-                  )
-                end
+                status = if metric.key? 'status'
+                           metric['status']
+                         else
+                           # normal threshold evaluation
+                           evaluate(
+                             metric['value'],
+                             check_cfg['warn'],
+                             check_cfg['crit']
+                           )
+                         end
 
                 template_variables = metric
                 template_variables['cfg'] = check_cfg
@@ -108,7 +97,7 @@ module Sensu
                 end
 
                 append_event(
-                  "check_#{check_name}",
+                  "check_#{metric['name']}",
                   output,
                   status,
                   metric['source']
