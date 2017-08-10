@@ -21,6 +21,19 @@ describe Sensu::Plugins::Prometheus::Metrics, :vcr do
     expect(results).to include('source' => 'node-exporter2:9100', 'value' => '1')
   end
 
+  it '.custom_with_ip_address' do
+    cfg = {
+      'name' => 'heartbeat',
+      'query' => 'up',
+      'check' => {
+        'type' => 'equals',
+        'value' => 1
+      }
+    }
+    results = metrics.custom(cfg)
+    expect(results).to include('source' => '10.100.0.239:9100', 'value' => '1')
+  end
+
   context '.disk' do
     it 'checks the disk usage with a default name for a root partition' do
       cfg = { 'mount' => '/' }

@@ -20,7 +20,7 @@ module Sensu
         def custom(cfg)
           metrics = []
           @client.query(cfg['query']).each do |result|
-            source = if result['metric']['instance'] =~ /^\d+/
+            source = if result['metric'].key? 'app'
                        result['metric']['app']
                      else
                        result['metric']['instance']

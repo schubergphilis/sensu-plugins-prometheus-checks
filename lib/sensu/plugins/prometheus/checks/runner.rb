@@ -235,10 +235,6 @@ module Sensu
           # "source" against "source_nodename_map" and composing "address" using
           # configuration "domain" entry.
           def append_event(name, output, status, source)
-            log.info(
-              "[#{status}] check: '#{name}', output: '#{output}', source: '#{source}'"
-            )
-
             # let source-nodename mapping avialable
             @source_nodename_map = source_nodename_map \
               if @source_nodename_map.nil?
@@ -246,6 +242,10 @@ module Sensu
             # translating node_exporter hostname into nodename plus domain
             nodename = @source_nodename_map[source] || source
             address = "#{nodename}.#{@config['config']['domain']}"
+
+            log.info(
+              "[#{status}] check: '#{name}', output: '#{output}', source: '#{nodename}'"
+            )
 
             @events << {
               'address' => sensu_safe(address),
