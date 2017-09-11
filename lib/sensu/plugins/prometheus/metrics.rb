@@ -77,6 +77,7 @@ module Sensu
               percent = result['value'][1].to_i
               results << { 'output' => "#{q['name'].capitalize}: #{mountpoint}, Usage: #{percent}% |#{q['name']}=#{percent}",
                            'name' => "#{q['name']}_#{disk_name}",
+                           'value' => percent,
                            'source' => hostname }
             end
           end

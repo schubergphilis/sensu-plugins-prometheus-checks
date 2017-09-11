@@ -7,6 +7,9 @@ module Sensu
         # Given current result, warning and critical levels, it will return a
         # integer with the current level, zero is success.
         def evaluate(result, warn, crit)
+          # If no result was given return an unknown since converting nil to a float gives 0.0 :(
+          return 3 if result.nil?
+
           result = result.to_f
           warn = warn.to_f
           crit = crit.to_f
