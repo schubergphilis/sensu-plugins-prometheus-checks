@@ -66,9 +66,11 @@ describe Sensu::Plugins::Prometheus::Metrics, :vcr do
       results = metrics.disk_all(cfg)
       expect(results).to include('output' => 'Disk: /var/lib/docker, Usage: 29% |disk=29',
                                  'name' => 'disk_var_lib_docker',
+                                 'value' => 29,
                                  'source' => 'node-exporter3:9100')
       expect(results).to include('output' => 'Disk: /usr, Usage: 67% |disk=67',
                                  'name' => 'disk_usr',
+                                 'value' => 67,
                                  'source' => 'node-exporter3:9100')
     end
     it 'checks the inode percentage usage' do
@@ -76,9 +78,11 @@ describe Sensu::Plugins::Prometheus::Metrics, :vcr do
       results = metrics.disk_all(cfg)
       expect(results).to include('output' => 'Inode: /var/lib/docker, Usage: 8% |inode=8',
                                  'name' => 'inode_var_lib_docker',
+                                 'value' => 8,
                                  'source' => 'node-exporter3:9100')
       expect(results).to include('output' => 'Inode: /usr, Usage: 5% |inode=5',
                                  'name' => 'inode_usr',
+                                 'value' => 5,
                                  'source' => 'node-exporter3:9100')
     end
   end

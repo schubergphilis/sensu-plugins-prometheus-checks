@@ -12,6 +12,7 @@ describe Sensu::Plugins::Prometheus::Checks, :vcr do
     expect(evaluate(3, 4, 5)).to equal(0)
     expect(evaluate(4.1, 4, 5)).to equal(1)
     expect(evaluate(6, 4, 5)).to equal(2)
+    expect(evaluate(nil, 4, 5)).to equal(3)
   end
 
   it '#equals' do
