@@ -85,6 +85,22 @@ describe Sensu::Plugins::Prometheus::Metrics, :vcr do
                                  'value' => 5,
                                  'source' => 'node-exporter3:9100')
     end
+    it 'checks the proc mountpoint is ignored' do
+      cfg = { 'ignore_dev' => 'proc' }
+      results = metrics.disk_all(cfg)
+      expect(results).to_not include('output' => 'Disk: /proc/fs, Usage: 99% |disk=99',
+                                 'name' => 'disk_proc_fs',
+                                 'value' => 99,
+                                 'source' => 'node-exporter1:9100')
+    end
+    it 'checks proc mountpoint is included when filter set differently' do
+      cfg = { 'ignore_dev' => 'cgroup' }
+      results = metrics.disk_all(cfg)
+      expect(results).to include('output' => 'Disk: /proc/fs, Usage: 99% |disk=99',
+                                 'name' => 'disk_proc_fs',
+                                 'value' => 99,
+                                 'source' => 'node-exporter1:9100')
+    end
   end
 
   context '.inode' do

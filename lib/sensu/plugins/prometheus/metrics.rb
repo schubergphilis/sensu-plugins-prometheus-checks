@@ -51,12 +51,10 @@ module Sensu
         def disk_all(cfg)
           results = []
           ignore_fs = cfg['ignore_fs'] || 'tmpfs'
-          ignore_dev = cfg['ignore_dev'] || 'proc|cgroup|tmpfs|selinuxfs|debugfs|securityfs|mqueue|pstore|devpts'
+          ignore_dev = cfg['ignore_dev'] || 'cgroup|tmpfs|selinuxfs|debugfs|securityfs|mqueue|pstore|devpts'
           ignore_mount = cfg['ignore_mount'] || '/etc/.*|/dev/.*'
 
-          #ignore = "fstype!~\"#{ignore_fs}\",device!~\"#{ignore_dev}\",mountpoint!~\"#{ignore_mount}\""
-          ignore = format('fstype!~"%s",device!~"%s",mountpoint!~"%s', ignore_fs, ignore_dev, ignore_mount) 
-          puts ignore
+          ignore = format('fstype!~"%s",device!~"%s",mountpoint!~"%s"', ignore_fs, ignore_dev, ignore_mount) 
 
           queries = [
             {
