@@ -410,6 +410,7 @@ node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/ku
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/80030ee6-6521-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-22wzu"} 1.022511e+06
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/8173f927-65f7-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-8vcna"} 1.022511e+06
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/8173f927-65f7-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/openam"} 1.022513e+06
+node_filesystem_files_free{device="proc",fstype="proc",mountpoint="/proc/fs"} 1.022513e+06
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/a3d5386a-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/openam"} 1.022519e+06
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/a5434245-6390-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-noude"} 1.022511e+06
 node_filesystem_files_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/c0a59bf1-6847-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/cacert"} 1.022515e+06
@@ -450,6 +451,8 @@ node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/7ffe59ff-6521-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-22wzu"} 4.188229632e+09
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/80030ee6-6521-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-22wzu"} 4.188229632e+09
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/8173f927-65f7-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-8vcna"} 4.188229632e+09
+node_filesystem_free{device="proc",fstype="proc",mountpoint="/proc/fs"} 1.022513e+06
+node_filesystem_avail{device="proc",fstype="proc",mountpoint="/proc/fs"} 1.022513e+04
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/8173f927-65f7-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/openam"} 4.18822144e+09
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/a3d5386a-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/openam"} 4.18824192e+09
 node_filesystem_free{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/a5434245-6390-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-noude"} 4.188229632e+09
@@ -540,6 +543,7 @@ node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/d512aa9a-6612-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/cacert"} 4.18824192e+09
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/d512aa9a-6612-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-k0t9u"} 4.18824192e+09
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/e31ee0f5-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/cacert"} 4.18824192e+09
+node_filesystem_size{device="proc",fstype="proc",mountpoint="/proc/fs"} 1.022513e+06
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/e31ee0f5-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-k0t9u"} 4.18824192e+09
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/e33412c3-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/default-token-k0t9u"} 4.18824192e+09
 node_filesystem_size{device="tmpfs",fstype="tmpfs",mountpoint="/var/lib/kubelet/pods/e33412c3-6611-11e6-9a4d-0200273f0007/volumes/kubernetes.io~secret/openam"} 4.18824192e+09
