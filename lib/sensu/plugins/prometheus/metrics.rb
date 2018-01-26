@@ -50,8 +50,13 @@ module Sensu
         # `tmpfs` or the regexp configured on check.
         def disk_all(cfg)
           results = []
-          ignored = cfg['ignore_fs'] || 'tmpfs'
-          ignore_fs = "fstype!~\"#{ignored}\""
+          ignore_fs = cfg['ignore_fs'] || 'tmpfs'
+          ignore_dev = cfg['ignore_dev'] || 'proc|cgroup|tmpfs|selinuxfs|debugfs|securityfs|mqueue|pstore|devpts'
+          ignore_mount = cfg['ignore_mount'] || '/etc/.*|/dev/.*'
+
+          #ignore = "fstype!~\"#{ignore_fs}\",device!~\"#{ignore_dev}\",mountpoint!~\"#{ignore_mount}\""
+          ignore = format('fstype!~"%s",device!~"%s",mountpoint!~"%s', ignore_fs, ignore_dev, ignore_mount) 
+          puts ignore
 
           queries = [
             {
@@ -67,8 +72,8 @@ module Sensu
           ]
           queries.each do |q|
             query = @client.percent_query_free(
-              "#{q['used']}{#{ignore_fs}}",
-              "#{q['free']}{#{ignore_fs}}"
+              "#{q['used']}{#{ignore}}",
+              "#{q['free']}{#{ignore}}"
             )
             @client.query(query).each do |result|
               hostname = result['metric']['instance']
@@ -84,7 +89,7 @@ module Sensu
           results
         end
 
-        # Queyr percentage of free inodes on check's configured mountpoint.
+        # Query percentage of free inodes on check's configured mountpoint.
         def inode(cfg)
           mountpoint = "mountpoint=\"#{cfg['mount']}\""
           disk_name = cfg['name'] || nice_disk_name(cfg['mount'])
