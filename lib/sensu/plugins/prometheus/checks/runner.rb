@@ -21,7 +21,7 @@ module Sensu
           # on this class will consume.
           def initialize(config)
             raise 'Configuration is empty, abort!' \
-              if !config || config.nil? || config.empty?
+              if !!config == config || config.nil? || config.empty?
             raise "Configuration does not specify 'config' section!" \
               unless config.key?('config')
 
