@@ -14,3 +14,12 @@ Style/GlobalVars:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
+  Enabled: false

@@ -90,11 +90,11 @@ module Sensu
                 template_variables = metric
                 template_variables['cfg'] = check_cfg
 
-                if metric.key? 'output'
-                  output = metric['output']
-                else
-                  output = @tmpl.render(check['check'], template_variables)
-                end
+                output = if metric.key? 'output'
+                           metric['output']
+                         else
+                           @tmpl.render(check['check'], template_variables)
+                         end
 
                 append_event(
                   "check_#{metric['name']}",
