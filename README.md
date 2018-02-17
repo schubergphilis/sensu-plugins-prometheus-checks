@@ -19,7 +19,7 @@ PROM_DEBUG=true check_prometheus.rb /path/to/config.yml
 
 Dependencies: docker, docker-compose
 
-To spinup a development stack and run the integration tests
+To spin-up a development stack and run the integration tests
 ```
 ruby test.rb
 ```
